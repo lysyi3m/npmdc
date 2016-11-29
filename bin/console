@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "npmdc"
+require 'bundler/setup'
+require 'npmdc'
 
-require "irb"
+require 'irb'
 IRB.start

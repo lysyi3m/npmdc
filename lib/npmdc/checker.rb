@@ -1,12 +1,12 @@
-require "json"
-require "npmdc/helpers"
+require 'json'
+require 'npmdc/helpers'
 
 module Npmdc
   class Checker
     def initialize(options)
       @options = {
-        :path => options[:path] || Dir.pwd,
-        :verbose => options[:verbose]
+        path: options[:path] || Dir.pwd,
+        verbose: options[:verbose]
       }
     end
 
@@ -18,21 +18,21 @@ module Npmdc
         @installed_modules = get_installed_modules
       end
 
-      if package_json_data&.key?("dependencies")
-        dependencies = package_json_data["dependencies"]
+      if package_json_data&.key?('dependencies')
+        dependencies = package_json_data['dependencies']
         check_dependencies(dependencies)
       end
 
-      if package_json_data&.key?("devDependencies")
-        dev_dependencies = package_json_data["devDependencies"]
-        check_dependencies(dev_dependencies, "devDependencies")
+      if package_json_data&.key?('devDependencies')
+        dev_dependencies = package_json_data['devDependencies']
+        check_dependencies(dev_dependencies, 'devDependencies')
       end
     end
 
     private
 
     def get_installed_modules
-      modules_directory = File.join(@options[:path], "node_modules")
+      modules_directory = File.join(@options[:path], 'node_modules')
 
       if Dir.exists?(modules_directory)
         modules = {}
@@ -47,7 +47,7 @@ module Npmdc
       else
         message = [
           "Failed! Can't find `node_modules` folder inside '#{@options[:path]}' directory!",
-          "Try running `npm install` first."
+          'Try running `npm install` first.'
         ].join("\n")
 
         puts message
@@ -56,7 +56,7 @@ module Npmdc
     end
 
     def get_package_json(directory)
-      file_path = File.join(directory, "package.json")
+      file_path = File.join(directory, 'package.json')
 
       if File.file?(file_path)
         File.read(file_path)
@@ -69,11 +69,11 @@ module Npmdc
       begin
         JSON.parse(json)
       rescue JSON::ParserError => e
-        raise "Failed to parse package.json file."
+        raise 'Failed to parse package.json file.'
       end
     end
 
-    def check_dependencies(deps = {}, type = "dependencies")
+    def check_dependencies(deps = {}, type = 'dependencies')
       puts "Check #{type}..." if @options[:verbose]
 
       missed_dependencies = []
@@ -82,7 +82,7 @@ module Npmdc
         if @installed_modules.key?(dep)
           package_json = get_package_json(@installed_modules[dep])
           package_json_data = parse_package_json(package_json)
-          missed_dependencies.push(dep) unless package_json_data["name"] == dep
+          missed_dependencies.push(dep) unless package_json_data['name'] == dep
         else
           missed_dependencies.push(dep)
         end

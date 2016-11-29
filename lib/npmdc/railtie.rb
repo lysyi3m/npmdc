@@ -6,8 +6,8 @@ module Npmdc
 
     initializer 'npmdc' do |app|
       options = {
-        :path => app.config.npmdc[:path] || Rails.root,
-        :verbose => app.config.npmdc[:verbose]
+        path: app.config.npmdc[:path] || Rails.root,
+        verbose: app.config.npmdc[:verbose]
       }
 
       Npmdc.call(options)
