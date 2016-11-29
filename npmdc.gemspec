@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["emil.kashkevich@gmail.com"]
   spec.summary       = "Check for missed dependencies of NPM packages."
   spec.description   = "Check for missed dependencies of NPM packages based on dependency list specified in package.json file."
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/lysyi3m/npmdc"
   spec.license       = "MIT"
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
