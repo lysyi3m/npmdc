@@ -1,6 +1,6 @@
-require 'npmdc/checker'
-require 'npmdc/railtie' if defined?(Rails)
-require 'npmdc/version'
+require "npmdc/checker"
+require "npmdc/railtie" if defined?(Rails)
+require "npmdc/version"
 
 module Npmdc
   def self.call(options = {})
