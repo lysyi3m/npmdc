@@ -1,9 +1,16 @@
 require 'rails'
 
-class Npmdc::Railtie < Rails::Railtie
-  config.npmdc = ActiveSupport::OrderedOptions.new
+module Npmdc
+  class Railtie < Rails::Railtie
+    config.npmdc = ActiveSupport::OrderedOptions.new
 
-  initializer "npmdc" do |app|
-    Npmdc.call(app.config.npmdc[:options])
+    initializer 'npmdc' do |app|
+      options = {
+        :path => app.config.npmdc[:path] || Rails.root,
+        :verbose => app.config.npmdc[:verbose]
+      }
+
+      Npmdc.call(options)
+    end
   end
 end
