@@ -6,6 +6,11 @@ npmdc
 
 **NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file.
 
+<a href="https://evilmartians.com/?utm_source=npmdc">
+  <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54">
+</a>
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
