@@ -7,3 +7,8 @@ Initial implementation of Npmdc gem with following features:
 * Works with Ruby On Rails
 
 * Standalone CLI tool
+
+
+### 0.1.1 Compatibility improvemnts
+
+* Now works with Ruby >= 2.2.0
