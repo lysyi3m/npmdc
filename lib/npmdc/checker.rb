@@ -34,7 +34,7 @@ module Npmdc
     def get_installed_modules
       modules_directory = File.join(@options[:path], 'node_modules')
 
-      if Dir.exists?(modules_directory)
+      if Dir.exist?(modules_directory)
         modules = {}
 
         Dir.entries(modules_directory).each do |entry|
