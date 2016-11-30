@@ -1,5 +1,5 @@
 require 'json'
-require 'npmdc/helpers'
+require 'active_support/inflector'
 
 module Npmdc
   class Checker
@@ -30,6 +30,10 @@ module Npmdc
     end
 
     private
+
+    def pluralize
+      ActiveSupport::Inflector.pluralize(self)
+    end
 
     def get_installed_modules
       modules_directory = File.join(@options[:path], 'node_modules')
@@ -92,13 +96,13 @@ module Npmdc
         message = [
           "Failed! Following #{type} required by your package.json file are missing or not installed properly:\n",
           missed_dependencies.map { |dep| "* #{dep}@#{deps[dep]}" },
-          "\nRun `npm install` to install missing packages.",
+          "\nRun `npm install` to install #{missed_dependencies.length} missing #{'package'.pluralize(missed_dependencies.length)}.",
         ].join("\n")
 
         puts message
         exit
       else
-        puts "OK! #{pluralize(deps.length, 'dependency', 'dependencies')} checked." if @options[:verbose]
+        puts "OK! #{deps.length} #{'dependency'.pluralize(deps.length)} checked." if @options[:verbose]
       end
     end
   end
