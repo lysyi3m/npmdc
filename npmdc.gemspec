@@ -14,13 +14,12 @@ Gem::Specification.new do |spec|
   spec.description   = 'Check for missed dependencies of NPM packages based on dependency list specified in package.json file.'
   spec.homepage      = 'https://github.com/lysyi3m/npmdc'
   spec.license       = 'MIT'
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'bin'
   spec.executables   = ['npmdc']
   spec.require_paths = ['lib']
-  spec.add_dependency 'thor'
+  spec.required_ruby_version = '>= 2.2.0'
+  spec.add_dependency 'thor', '~> 0.19.4'
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
