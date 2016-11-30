@@ -68,8 +68,8 @@ module Npmdc
     def parse_package_json(json)
       begin
         JSON.parse(json)
-      rescue JSON::ParserError => e
-        raise 'Failed to parse package.json file.'
+      rescue JSON::ParserError => error
+        raise error
       end
     end
 
