@@ -1,4 +1,7 @@
-# npmdc
+[![Build Status](https://travis-ci.org/lysyi3m/npmdc.svg?branch=master)](https://travis-ci.org/lysyi3m/npmdc)
+
+npmdc
+=========
 
 *NPM Dependency Checker* is a simple tool which can check for missed dependencies based on your `package.json` file.
 
