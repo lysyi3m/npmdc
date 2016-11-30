@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/lysyi3m/npmdc.svg?branch=master)](https://travis-ci.org/lysyi3m/npmdc)
+[![Code Climate](https://codeclimate.com/github/lysyi3m/npmdc/badges/gpa.svg)](https://codeclimate.com/github/lysyi3m/npmdc)
 [![Gem Version](https://badge.fury.io/rb/npmdc.svg)](https://badge.fury.io/rb/npmdc)
 
 npmdc
