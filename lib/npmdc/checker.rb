@@ -18,12 +18,12 @@ module Npmdc
         @installed_modules = get_installed_modules
       end
 
-      if package_json_data&.key?('dependencies')
+      if package_json_data && package_json_data.key?('dependencies')
         dependencies = package_json_data['dependencies']
         check_dependencies(dependencies)
       end
 
-      if package_json_data&.key?('devDependencies')
+      if package_json_data && package_json_data.key?('devDependencies')
         dev_dependencies = package_json_data['devDependencies']
         check_dependencies(dev_dependencies, 'devDependencies')
       end
@@ -82,7 +82,7 @@ module Npmdc
         if @installed_modules.key?(dep)
           package_json = get_package_json(@installed_modules[dep])
           package_json_data = parse_package_json(package_json)
-          missed_dependencies.push(dep) unless package_json_data['name'] == dep
+          missed_dependencies.push(dep) unless package_json_data && package_json_data['name'] == dep
         else
           missed_dependencies.push(dep)
         end
