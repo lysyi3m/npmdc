@@ -1,0 +1,20 @@
+{
+  "name": "case_2",
+  "version": "",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "foo": "1.0.0",
+    "bar": "2.0.0",
+    "foobar": "3.0.0"
+  },
+  "devDependencies": {
+    "foo": "1.0.0",
+    "bar": "2.0.0"
+  },
+  "license": "ISC"
+}

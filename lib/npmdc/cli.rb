@@ -3,11 +3,13 @@ require 'npmdc'
 
 module Npmdc
   class Cli < Thor
-    class_option 'verbose', type: :boolean, desc: 'Enable verbose output mode', aliases: '-V'
     default_task :check
 
     desc 'check', 'Run check'
-    option :path
+    method_option :path, desc: 'Path to package.json config'
+    method_option :'no-color', desc: 'Disable color', type: :boolean
+    method_option :format, desc: "Output format, possible values: #{Npmdc::Formatter::FORMATTERS.keys.join(", ")}"
+
     def check
       Npmdc::Checker.new(options).call
     end
