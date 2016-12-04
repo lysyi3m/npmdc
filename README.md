@@ -37,6 +37,8 @@ YourApp::Application.configure do
   config.npmdc = {
     :path => "/path/to/your/frontend/code/dir" # `Rails.root` by default,
     :verbose => true                           # `false` by default
+    :'no-color' => true                        # `false` by default
+    :format => "doc"                           # `short`, `doc`, `progress`. `short` by default
   }
 end
 ```
@@ -44,9 +46,20 @@ end
 ### CLI tool:
 
 ```bash
-$ bundle exec npmdc --path="/path/to/your/frontend/code/dir" --verbose
+$ bundle exec npmdc [options]
 
 ```
+
+_Options:_
+
+* --path PATH - Path to frontend code
+
+* -V, --verbose - Set the verbose level of output
+
+* --no-color - Disable color formatting of output
+
+* --format FORMAT - Set format of output
+
 
 ## Development
 
