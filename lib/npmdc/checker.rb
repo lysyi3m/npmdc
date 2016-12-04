@@ -80,7 +80,7 @@ module Npmdc
     end
 
     def package_json(directory, filename = 'package.json')
-      raise WrongPathError, directory unless Dir.exists?(directory)
+      raise WrongPathError, directory unless Dir.exist?(directory)
       file_path = File.join(directory, filename)
       raise MissedPackageError, directory unless File.file?(file_path)
 
