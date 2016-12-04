@@ -21,3 +21,15 @@ Initial implementation of Npmdc gem with following features:
 * Better JSON parser errors - now with more details
 
 * Fixed deprecated methods
+
+### 0.2.0
+
+Thanks to @aderyabin !
+
+* Output formatters
+
+* Colorized output
+
+* Added specs
+
+* Refactored and optimized
