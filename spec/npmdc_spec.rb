@@ -152,7 +152,7 @@ Checking dependencies:
   ✓ bar
 
 Checking devDependencies:
-  ✓ bar
+  ✓ foobar
 
 3 packages checked. Everything is ok.
 output
@@ -162,7 +162,7 @@ output
       end
 
       it 'returns correct colors' do
-        output_msg = "Checking dependencies:\n\e[0;32;49m  ✓ foo\e[0m\n\e[0;32;49m  ✓ bar\e[0m\n\nChecking devDependencies:\n\e[0;32;49m  ✓ bar\e[0m\n\n\e[0;32;49m3 packages checked. Everything is ok.\e[0m\n"
+        output_msg = "Checking dependencies:\n\e[0;32;49m  ✓ foo\e[0m\n\e[0;32;49m  ✓ bar\e[0m\n\nChecking devDependencies:\n\e[0;32;49m  ✓ foobar\e[0m\n\n\e[0;32;49m3 packages checked. Everything is ok.\e[0m\n"
         expect{
           described_class.call(doc_formatter options)
         }.to output(output_msg).to_stdout
@@ -181,16 +181,17 @@ output
       it 'returns correct message' do
         output_msg = <<output
 Checking dependencies:
-.FF
-
-Checking devDependencies:
 .F
 
-Following dependencies required by your package.json file are missing or not installed properly:
-  * bar@2.0.0
-  * foobar@3.0.0
+Checking devDependencies:
+FF
 
-Run `npm install` to install 2 missed packages.
+Following dependencies required by your package.json file are missing or not installed properly:
+  * bar@1.0.0
+  * foobar@1.0.0
+  * foobarfoo@1.0.0
+
+Run `npm install` to install 3 missed packages.
 output
         expect{
           described_class.call(progress_formatter no_color_options)
@@ -198,7 +199,7 @@ output
       end
 
       it 'returns correct colors' do
-        output_msg = "Checking dependencies:\n\e[0;32;49m.\e[0m\e[0;31;49mF\e[0m\e[0;31;49mF\e[0m\n\nChecking devDependencies:\n\e[0;32;49m.\e[0m\e[0;31;49mF\e[0m\n\nFollowing dependencies required by your package.json file are missing or not installed properly:\n  * bar@2.0.0\n  * foobar@3.0.0\n\e[0;33;49m\nRun `npm install` to install 2 missed packages.\e[0m\n"
+        output_msg = "Checking dependencies:\n\e[0;32;49m.\e[0m\e[0;31;49mF\e[0m\n\nChecking devDependencies:\n\e[0;31;49mF\e[0m\e[0;31;49mF\e[0m\n\nFollowing dependencies required by your package.json file are missing or not installed properly:\n  * bar@1.0.0\n  * foobar@1.0.0\n  * foobarfoo@1.0.0\n\e[0;33;49m\nRun `npm install` to install 3 missed packages.\e[0m\n"
         expect{
           described_class.call(progress_formatter options)
         }.to output(output_msg).to_stdout

@@ -1,15 +1,9 @@
 {
   "name": "case_1",
-  "version": "",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
   "dependencies": {
     "foo": "1.0.0",
-    "bar": "2.0.0"
+    "bar": "1.0.0"
   },
   "license": "ISC"
 }
