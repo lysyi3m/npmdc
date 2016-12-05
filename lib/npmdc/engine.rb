@@ -4,8 +4,8 @@ module Npmdc
   class Engine < Rails::Engine # :nodoc:
     config.npmdc = ActiveSupport::OrderedOptions.new
 
-    initializer "run Npmdc on start-up" do |app|
-      options = app.npmdc
+    initializer "npmdc.load_hook" do |app|
+      options = app.config.npmdc
       options.path ||= Rails.root
       Npmdc.call(options)
     end
