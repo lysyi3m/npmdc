@@ -16,6 +16,8 @@ module Dummy
     config.api_only = true
     config.log_level = :unknown
     config.eager_load = false
+    config.npmdc.format = :doc
+    config.logger = Logger.new('/dev/null')
   end
 end
 
