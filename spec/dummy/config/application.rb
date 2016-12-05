@@ -1,10 +1,5 @@
 require_relative 'boot'
-
-# Pick the frameworks you want:
-# require "active_record/railtie"
-require "action_controller/railtie"
-require "action_view/railtie"
-# require "action_mailer/railtie"
+require "rails"
 
 Bundler.require(*Rails.groups)
 require "npmdc"
@@ -19,6 +14,8 @@ module Dummy
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.log_level = :unknown
+    config.eager_load = false
   end
 end
 
