@@ -2,19 +2,19 @@ require 'spec_helper'
 
 describe Npmdc do
   def no_color_options(arg = options)
-    arg.merge('no_color' => true)
+    arg.merge('no-color' => true)
   end
 
   def doc_formatter(arg = options)
-    arg.merge('format' => 'doc')
+    arg.merge(:format => 'doc')
   end
 
   def progress_formatter(arg = options)
-    arg.merge('format' => 'progress')
+    arg.merge(:format => 'progress')
   end
 
   context 'no /node_modules folder' do
-    let(:options) { {'path' => './spec/files/case_1/'} }
+    let(:options) { {:path => './spec/files/case_1/'} }
 
     it 'returns false' do
       expect(described_class.call(options)).to be false
@@ -42,7 +42,7 @@ output
   end
 
   context 'no package.json file' do
-    let(:options) { {'path' => './spec/'} }
+    let(:options) { {:path => './spec/'} }
 
     it 'returns false' do
       expect(described_class.call(options)).to be false
@@ -68,7 +68,7 @@ output
   end
 
   context 'unexisted path' do
-    let(:options) { {'path' => './unexisted/'} }
+    let(:options) { {:path => './unexisted/'} }
     let(:output_msg) { "There is no './unexisted/' directory.\n" }
 
     it 'returns false' do
@@ -83,7 +83,7 @@ output
   end
 
   context 'unexisted path' do
-    let(:options) { {'path' => './unexisted/'} }
+    let(:options) { {:path => './unexisted/'} }
     let(:output_msg) { "There is no './unexisted/' directory.\n" }
 
     it 'returns false' do
@@ -98,7 +98,7 @@ output
   end
 
   context 'incorrect json' do
-    let(:options) { {'path' => './spec/files/case_4'}}
+    let(:options) { {:path => './spec/files/case_4'}}
     let(:output_msg) { "Can't parse JSON file ./spec/files/case_4/package.json\n" }
 
     it 'returns false' do
@@ -114,7 +114,7 @@ output
   end
 
   context 'success check' do
-    let(:options) { {'path' => './spec/files/case_2/'} }
+    let(:options) { {:path => './spec/files/case_2/'} }
 
     it 'returns true' do
       expect(described_class.call(options)).to be true
@@ -171,7 +171,7 @@ output
   end
 
   context 'failure check' do
-    let(:options) { {'path' => './spec/files/case_3/'} }
+    let(:options) { {:path => './spec/files/case_3/'} }
 
     it 'returns false' do
       expect(described_class.call(options)).to be false
