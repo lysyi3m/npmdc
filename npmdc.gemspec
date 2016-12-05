@@ -20,8 +20,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.2.2'
   spec.add_dependency 'thor', '~> 0.19.4'
+  spec.add_dependency 'colorize', '~> 0.8.1'
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'colorize', '~> 0.8.1'
 end
