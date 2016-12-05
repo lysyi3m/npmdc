@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
   spec.executables   = ['npmdc']
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.2.2'
-  spec.add_dependency 'activesupport', '~> 5.0', '>= 5.0.0.1'
   spec.add_dependency 'thor', '~> 0.19.4'
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'

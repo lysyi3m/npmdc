@@ -1,6 +1,6 @@
 require 'colorize'
 require 'json'
-require 'active_support/inflector'
+require 'npmdc/helpers'
 require 'npmdc/formatter'
 require 'npmdc/errors'
 require 'forwardable'
@@ -57,7 +57,7 @@ module Npmdc
           end
           output("\nRun `npm install` to install #{@missed_dependencies.uniq.count} missed packages.", :warn)
         elsif success
-          output("#{@dependencies_count} #{"package".pluralize(@dependencies_count)} checked. Everything is ok.", :success)
+          output("#{pluralize(@dependencies_count, 'package')} checked. Everything is ok.", :success)
         end
 
         return success
