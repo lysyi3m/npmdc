@@ -2,7 +2,7 @@ require 'colorized_string'
 
 module Npmdc
   module Formatters
-    class BaseFormatter
+    class Base
 
       COLORS = {
         success: :green,
@@ -11,14 +11,18 @@ module Npmdc
         info: :white
       }.freeze
 
-      def initialize(options, output = $stdout)
+      def initialize(options, output = Npmdc.output)
         @options = options
         @output = output
-        @disable_colorization = !!(@options['no-color'] || @options['no_color'])
+        @disable_colorization = !@options.fetch(:color, true)
       end
 
       def output(message, status = nil)
         @output.puts color_message(message, status)
+      end
+
+      def dep_output(dep, status)
+        # no-op
       end
 
       def check_finish_output

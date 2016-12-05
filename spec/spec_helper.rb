@@ -1,12 +1,10 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'npmdc'
+require 'pry-byebug'
 
-RSpec.configure do |config|
-  config.before(:each) do
-    $stdout = StringIO.new
-  end
+ENV["RAILS_ENV"] = "test"
+require File.expand_path("../dummy/config/environment", __FILE__)
 
-  config.after(:each) do
-    $stdout = STDOUT
-  end
-end
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+# disable output
+Npmdc.output = StringIO.new

@@ -1,9 +1,8 @@
+require_relative './base'
+
 module Npmdc
   module Formatters
-    class ShortFormatter < BaseFormatter
-      def dep_output(dep, status, options = {})
-      end
-
+    class Short < Base
       def check_start_output(type)
       end
 
