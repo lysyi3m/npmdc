@@ -3,4 +3,5 @@
 require 'bundler/setup'
 require 'npmdc/cli'
 
-Npmdc::Cli.start(ARGV)
+result = Npmdc::Cli.start(ARGV)
+exit(result ? 0 : 1)
