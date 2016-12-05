@@ -22,6 +22,7 @@ Initial implementation of Npmdc gem with following features:
 
 * Fixed deprecated methods
 
+
 ### 0.2.0
 
 Thanks to @aderyabin !
@@ -34,6 +35,12 @@ Thanks to @aderyabin !
 
 * Refactored and optimized
 
+
 ### 0.2.1
 
 * Dropped ActiveSupport dependency for better compatibility
+
+
+### 0.2.2
+
+* Fixed runtime dependencies
