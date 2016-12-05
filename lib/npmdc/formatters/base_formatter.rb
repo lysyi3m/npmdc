@@ -21,6 +21,10 @@ module Npmdc
         @output.puts color_message(message, status)
       end
 
+      def dep_output(dep, status)
+        # no-op
+      end
+
       def check_finish_output
         @output.puts "\n"
       end

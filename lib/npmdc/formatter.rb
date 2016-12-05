@@ -13,7 +13,7 @@ module Npmdc
 
     class << self
       def call(options)
-        fmt = options['format'] || options[:format] || DEFAULT_FORMAT
+        fmt = options.fetch(:format, DEFAULT_FORMAT)
         FORMATTERS[fmt.to_sym].new(options)
       end
     end
