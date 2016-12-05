@@ -34,12 +34,9 @@ Or install it yourself as:
 
 ```ruby
 YourApp::Application.configure do
-  config.npmdc = {
-    :path => "/path/to/your/frontend/code/dir" # `Rails.root` by default,
-    :verbose => true                           # `false` by default
-    :'no-color' => true                        # `false` by default
-    :format => "doc"                           # `short`, `doc`, `progress`. `short` by default
-  }
+  config.npmdc.path   = "/path/to/your/frontend/code/dir" # `Rails.root` by default
+  config.npmdc.format = "doc"                             # `short`, `doc`, `progress`. `short` by default
+  config.npmdc.color  = false                             # `true` by default
 end
 ```
 
@@ -54,11 +51,9 @@ _Options:_
 
 * --path PATH - Path to frontend code
 
-* -V, --verbose - Set the verbose level of output
+* --color - Disable color formatting of output
 
-* --no-color - Disable color formatting of output
-
-* --format FORMAT - Set format of output
+* -f, --format FORMAT - Set format of output
 
 
 ## Development
