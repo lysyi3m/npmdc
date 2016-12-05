@@ -14,7 +14,7 @@ module Npmdc
       def initialize(options, output = Npmdc.output)
         @options = options
         @output = output
-        @disable_colorization = !!(@options['no-color'] || @options['no_color'])
+        @disable_colorization = !@options.fetch(:color, true)
       end
 
       def output(message, status = nil)

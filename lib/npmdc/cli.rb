@@ -7,11 +7,11 @@ module Npmdc
 
     desc 'check', 'Run check'
     method_option :path, desc: 'Path to package.json config'
-    method_option :'no-color', desc: 'Disable color', type: :boolean
+    method_option :color, desc: 'Enable color', type: :boolean, default: true
     method_option :format, desc: "Output format, possible values: #{Npmdc::Formatter::FORMATTERS.keys.join(", ")}"
 
     def check
-      Npmdc::Checker.new(options).call
+      Npmdc.call(options)
     end
 
     map %w[--version -v] => :__print_version
