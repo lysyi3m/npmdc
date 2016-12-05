@@ -33,3 +33,7 @@ Thanks to @aderyabin !
 * Added specs
 
 * Refactored and optimized
+
+### 0.2.1
+
+* Dropped ActiveSupport dependency for better compatibility
