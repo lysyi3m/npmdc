@@ -1,208 +1,203 @@
 require 'spec_helper'
 
 describe Npmdc do
-  def no_color_options(arg = options)
-    arg.merge('no-color' => true)
-  end
+  let(:path) { nil }
+  let(:options) { { color: false, path: path } }
 
-  def doc_formatter(arg = options)
-    arg.merge(:format => 'doc')
-  end
-
-  def progress_formatter(arg = options)
-    arg.merge(:format => 'progress')
-  end
+  subject { described_class.call(options) }
 
   context 'no /node_modules folder' do
-    let(:options) { {:path => './spec/files/case_1/'} }
+    let(:path) { './spec/files/case_1/' }
 
-    it 'returns false' do
-      expect(described_class.call(options)).to be false
-    end
+    it { is_expected.to be false }
 
     it 'displays correct message' do
-        output_msg = <<output
-Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!
+      output_msg = <<~output
+        Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!
 
-Run `npm install` to install missing packages.
-output
+        Run `npm install` to install missing packages.
+      output
 
-        expect{
-          described_class.call(no_color_options)
-        }.to output(output_msg).to_stdout
+      expect { subject }.to write_output(output_msg)
     end
 
-    it 'displays correct colors' do
-        output_msg = "Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!\n\e[0;33;49m\nRun `npm install` to install missing packages.\e[0m\n"
+    it 'displays correct colors', :color do
+      options[:color] = true
+      output_msg = <<~output
+        Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!\n\e[0;33;49m
+        Run `npm install` to install missing packages.\e[0m
+      output
 
-        expect{
-          described_class.call(options)
-        }.to output(output_msg).to_stdout
+      expect { subject }.to write_output(output_msg)
     end
   end
 
   context 'no package.json file' do
-    let(:options) { {:path => './spec/'} }
+    let(:path) { './spec/' }
 
-    it 'returns false' do
-      expect(described_class.call(options)).to be false
-    end
+    it { is_expected.to be false }
 
     it 'displays correct message' do
-      output_msg = <<output
-There is no `package.json` file inside './spec/' directory.
-output
+      output_msg = <<~output
+        There is no `package.json` file inside './spec/' directory.
+      output
 
-      expect{
-        described_class.call(no_color_options)
-      }.to output(output_msg).to_stdout
+      expect { subject }.to write_output(output_msg)
     end
 
     it 'displays correct colors' do
-        output_msg = "There is no `package.json` file inside './spec/' directory.\n"
+      options[:color] = true
+ 
+      output_msg = <<~output
+        There is no `package.json` file inside './spec/' directory.
+      output
 
-        expect{
-          described_class.call(options)
-        }.to output(output_msg).to_stdout
+      expect { subject }.to write_output(output_msg)
     end
   end
 
   context 'unexisted path' do
-    let(:options) { {:path => './unexisted/'} }
+    let(:path) { './unexisted/' }
     let(:output_msg) { "There is no './unexisted/' directory.\n" }
 
-    it 'returns false' do
-      expect(described_class.call(options)).to be false
-    end
+    it { is_expected.to be false }
 
     it 'displays correct message' do
-      expect{
-        described_class.call(no_color_options)
-      }.to output(output_msg).to_stdout
-    end
-  end
-
-  context 'unexisted path' do
-    let(:options) { {:path => './unexisted/'} }
-    let(:output_msg) { "There is no './unexisted/' directory.\n" }
-
-    it 'returns false' do
-      expect(described_class.call(options)).to be false
-    end
-
-    it 'displays correct message' do
-      expect{
-        described_class.call(no_color_options)
-      }.to output(output_msg).to_stdout
+      expect { subject }.to write_output(output_msg)
     end
   end
 
   context 'incorrect json' do
-    let(:options) { {:path => './spec/files/case_4'}}
+    let(:path) { './spec/files/case_4' }
     let(:output_msg) { "Can't parse JSON file ./spec/files/case_4/package.json\n" }
 
-    it 'returns false' do
-      expect(described_class.call(options)).to be false
-    end
+    it { is_expected.to be false }
 
     it 'displays correct message' do
-      expect{
-        described_class.call(no_color_options)
-      }.to output(output_msg).to_stdout
+      expect { subject }.to write_output(output_msg)
     end
-
   end
 
   context 'success check' do
-    let(:options) { {:path => './spec/files/case_2/'} }
+    let(:path) { './spec/files/case_2/' }
 
-    it 'returns true' do
-      expect(described_class.call(options)).to be true
-    end
+    it { is_expected.to be true }
 
     context 'with progress formatter' do
+      before { options[:format] = 'progress' }
+
       it 'returns correct message' do
-        output_msg = <<output
-Checking dependencies:
-..
+        output_msg = <<~output
+          Checking dependencies:
+          ..
 
-Checking devDependencies:
-.
+          Checking devDependencies:
+          .
 
-3 packages checked. Everything is ok.
-output
-        expect{
-          described_class.call(progress_formatter no_color_options)
-        }.to output(output_msg).to_stdout
+          Checked 3 packages. Everything is ok.
+        output
+
+        expect { subject }.to write_output(output_msg)
       end
 
       it 'returns correct colors' do
-        output_msg = "Checking dependencies:\n\e[0;32;49m.\e[0m\e[0;32;49m.\e[0m\n\nChecking devDependencies:\n\e[0;32;49m.\e[0m\n\n\e[0;32;49m3 packages checked. Everything is ok.\e[0m\n"
-        expect{
-          described_class.call(progress_formatter options)
-        }.to output(output_msg).to_stdout
+        options[:color] = true
+
+        output_msg = <<~output
+          Checking dependencies:
+          \e[0;32;49m.\e[0m\e[0;32;49m.\e[0m
+
+          Checking devDependencies:
+          \e[0;32;49m.\e[0m
+
+          \e[0;32;49mChecked 3 packages. Everything is ok.\e[0m
+        output
+
+        expect { subject }.to write_output(output_msg)
       end
     end
 
     context 'with doc formatter' do
+      before { options[:format] = 'doc' }
+
       it 'returns correct message' do
-        output_msg = <<output
-Checking dependencies:
-  ✓ foo
-  ✓ bar
+        output_msg = <<~output
+          Checking dependencies:
+            ✓ foo
+            ✓ bar
 
-Checking devDependencies:
-  ✓ foobar
+          Checking devDependencies:
+            ✓ foobar
 
-3 packages checked. Everything is ok.
-output
-        expect{
-          described_class.call(doc_formatter no_color_options)
-        }.to output(output_msg).to_stdout
+          Checked 3 packages. Everything is ok.
+        output
+
+        expect { subject }.to write_output(output_msg)
       end
 
       it 'returns correct colors' do
-        output_msg = "Checking dependencies:\n\e[0;32;49m  ✓ foo\e[0m\n\e[0;32;49m  ✓ bar\e[0m\n\nChecking devDependencies:\n\e[0;32;49m  ✓ foobar\e[0m\n\n\e[0;32;49m3 packages checked. Everything is ok.\e[0m\n"
-        expect{
-          described_class.call(doc_formatter options)
-        }.to output(output_msg).to_stdout
+        options[:color] = true
+        output_msg = <<~output
+          Checking dependencies:
+          \e[0;32;49m  ✓ foo\e[0m
+          \e[0;32;49m  ✓ bar\e[0m
+
+          Checking devDependencies:
+          \e[0;32;49m  ✓ foobar\e[0m
+
+          \e[0;32;49mChecked 3 packages. Everything is ok.\e[0m
+        output
+
+        expect { subject }.to write_output(output_msg)
       end
     end
   end
 
   context 'failure check' do
-    let(:options) { {:path => './spec/files/case_3/'} }
+    let(:path) { './spec/files/case_3/' }
 
-    it 'returns false' do
-      expect(described_class.call(options)).to be false
-    end
+    it { is_expected.to be false }
 
     context 'with progress formatter' do
+      before { options[:format] = 'progress' }
+
       it 'returns correct message' do
-        output_msg = <<output
-Checking dependencies:
-.F
+        output_msg = <<~output
+          Checking dependencies:
+          .F
 
-Checking devDependencies:
-FF
+          Checking devDependencies:
+          FF
 
-Following dependencies required by your package.json file are missing or not installed properly:
-  * bar@1.0.0
-  * foobar@1.0.0
-  * foobarfoo@1.0.0
+          Following dependencies required by your package.json file are missing or not installed properly:
+            * bar@1.0.0
+            * foobar@1.0.0
+            * foobarfoo@1.0.0
 
-Run `npm install` to install 3 missed packages.
-output
-        expect{
-          described_class.call(progress_formatter no_color_options)
-        }.to output(output_msg).to_stdout
+          Run `npm install` to install 3 missing packages.
+        output
+
+        expect { subject }.to write_output(output_msg)
       end
 
       it 'returns correct colors' do
-        output_msg = "Checking dependencies:\n\e[0;32;49m.\e[0m\e[0;31;49mF\e[0m\n\nChecking devDependencies:\n\e[0;31;49mF\e[0m\e[0;31;49mF\e[0m\n\nFollowing dependencies required by your package.json file are missing or not installed properly:\n  * bar@1.0.0\n  * foobar@1.0.0\n  * foobarfoo@1.0.0\n\e[0;33;49m\nRun `npm install` to install 3 missed packages.\e[0m\n"
-        expect{
-          described_class.call(progress_formatter options)
-        }.to output(output_msg).to_stdout
+        options[:color] = true
+        output_msg = <<~output
+          Checking dependencies:
+          \e[0;32;49m.\e[0m\e[0;31;49mF\e[0m
+
+          Checking devDependencies:
+          \e[0;31;49mF\e[0m\e[0;31;49mF\e[0m
+
+          Following dependencies required by your package.json file are missing or not installed properly:
+            * bar@1.0.0
+            * foobar@1.0.0
+            * foobarfoo@1.0.0
+          \e[0;33;49m
+          Run `npm install` to install 3 missing packages.\e[0m
+        output
+
+        expect { subject }.to write_output(output_msg)
       end
     end
   end
