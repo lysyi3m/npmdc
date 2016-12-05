@@ -2,7 +2,7 @@ require 'colorized_string'
 
 module Npmdc
   module Formatters
-    class BaseFormatter
+    class Base
 
       COLORS = {
         success: :green,

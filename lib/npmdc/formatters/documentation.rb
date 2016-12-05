@@ -1,6 +1,8 @@
+require_relative './base'
+
 module Npmdc
   module Formatters
-    class DocumentationFormatter < BaseFormatter
+    class Documentation < Base
       def dep_output(dep, status)
         case status
         when :success
