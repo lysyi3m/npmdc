@@ -7,7 +7,5 @@ RSpec.configure do |config|
     $stdout = StringIO.new
   end
 
-  config.after(:each) do
-    $stdout = STDOUT
-  end
-end
+# disable output
+Npmdc.output = StringIO.new

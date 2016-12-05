@@ -3,7 +3,15 @@ require "npmdc/railtie" if defined?(Rails)
 require "npmdc/version"
 
 module Npmdc
-  def self.call(options = {})
-    Npmdc::Checker.new(options).call
+  class << self
+    attr_writer :output
+
+    def call(options = {})
+      Npmdc::Checker.new(options).call
+    end
+
+    def output
+      @output ||= STDOUT
+    end
   end
 end
