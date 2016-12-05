@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = ['npmdc']
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.2.2'
-  spec.add_dependency 'thor', '~> 0.19.4'
+  spec.add_dependency 'thor', '> 0.18'
   spec.add_dependency 'colorize', '~> 0.8.1'
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
