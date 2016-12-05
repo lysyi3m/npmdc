@@ -11,10 +11,10 @@ module Npmdc
         info: :white
       }.freeze
 
-      def initialize(options, output = Npmdc.output)
+      def initialize(options, output = Npmdc.config.output)
         @options = options
         @output = output
-        @disable_colorization = !@options.fetch('color', true)
+        @disable_colorization = !@options.fetch('color', Npmdc.config.color)
       end
 
       def output(message, status = nil)

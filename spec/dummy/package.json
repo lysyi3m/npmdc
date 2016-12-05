@@ -1,0 +1,9 @@
+{
+  "name": "case_1",
+  "main": "index.js",
+  "dependencies": {
+    "foo": "1.0.0",
+    "bar": "1.0.0"
+  },
+  "license": "ISC"
+}

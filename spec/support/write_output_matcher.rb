@@ -5,11 +5,11 @@ RSpec::Matchers.define :write_output do |output|
     raise ArgumentError('Supports only block') unless actual.is_a? Proc
 
     captured_stream = StringIO.new
-    original_stream = Npmdc.output
+    original_stream = Npmdc.config.output
     result = false
 
     begin
-      Npmdc.output = captured_stream
+      Npmdc.config.output = captured_stream
 
       actual.call
 
@@ -17,7 +17,7 @@ RSpec::Matchers.define :write_output do |output|
 
       result = @captured_string.include?(output)
     ensure
-      $stdout = original_stream
+      Npmdc.config.output = original_stream
     end
     result
   end

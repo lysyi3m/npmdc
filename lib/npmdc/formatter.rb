@@ -11,11 +11,9 @@ module Npmdc
       short:    Npmdc::Formatters::Short
     }.freeze
 
-    DEFAULT_FORMAT = :short
-
     class << self
       def call(options)
-        fmt = options.fetch('format', DEFAULT_FORMAT)
+        fmt = options.fetch('format', Npmdc.config.format)
         FORMATTERS[fmt.to_sym].new(options)
       end
     end

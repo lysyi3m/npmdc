@@ -2,12 +2,12 @@ require 'npmdc'
 
 module Npmdc
   class Engine < Rails::Engine # :nodoc:
-    config.npmdc = ActiveSupport::OrderedOptions.new
+    # Make config accessible through application config
+    config.npmdc = Npmdc.config
 
-    initializer "npmdc.load_hook" do |app|
-      options = app.config.npmdc
-      options.path ||= Rails.root
-      Npmdc.call(options.stringify_keys)
+    initializer "npmdc.load_hook" do |_app|
+      Npmdc.config.path = Rails.root unless Npmdc.config.path?
+      Npmdc.call
     end
   end
 end

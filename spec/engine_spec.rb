@@ -20,8 +20,13 @@ describe Npmdc::Engine do
 
     it "works" do
       expect(initializer).not_to be_nil
-      expect(Npmdc).to receive(:call).with(a_hash_including('path' => Rails.root, 'format' => :doc))
-      initializer.run(app)
+      output_msg = <<~output
+        Checking dependencies:
+          ✗ foo
+          ✗ bar
+      output
+
+      expect { initializer.run(app) }.to write_output(output_msg)
     end
   end
 end
