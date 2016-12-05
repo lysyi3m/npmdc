@@ -1,6 +1,5 @@
 require 'colorize'
 require 'json'
-require 'npmdc/helpers'
 require 'npmdc/formatter'
 require 'npmdc/errors'
 require 'forwardable'
