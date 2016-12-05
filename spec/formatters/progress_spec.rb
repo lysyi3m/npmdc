@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Npmdc::Formatters::Progress do
   let(:path) { './spec/files/case_2/' }
-  let(:options) { { color: false, format: 'progress', path: path } }
+  let(:options) { { 'color' => false, 'format' => 'progress', 'path' => path } }
 
   subject { Npmdc.call(options) }
 
@@ -21,7 +21,7 @@ describe Npmdc::Formatters::Progress do
   end
 
   it 'returns correct colors' do
-    options[:color] = true
+    options['color'] = true
 
     output_msg = <<~output
       Checking dependencies:
@@ -61,7 +61,7 @@ describe Npmdc::Formatters::Progress do
     end
 
     it 'returns correct colors' do
-      options[:color] = true
+      options['color'] = true
       output_msg = <<~output
         Checking dependencies:
         \e[0;32;49m.\e[0m\e[0;31;49mF\e[0m

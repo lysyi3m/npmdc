@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Npmdc::Formatters::Documentation do
   let(:path) { './spec/files/case_2/' }
-  let(:options) { { color: false, format: 'doc', path: path } }
+  let(:options) { { 'color' => false, 'format' => 'doc', 'path' => path } }
 
   subject { Npmdc.call(options) }
 
@@ -22,7 +22,7 @@ describe Npmdc::Formatters::Documentation do
   end
 
   it 'returns correct colors' do
-    options[:color] = true
+    options['color'] = true
     output_msg = <<~output
       Checking dependencies:
       \e[0;32;49m  ✓ foo\e[0m

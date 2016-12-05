@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Npmdc do
   let(:path) { nil }
-  let(:options) { { color: false, path: path } }
+  let(:options) { { 'color' => false, 'path' => path } }
 
   subject { described_class.call(options) }
 
@@ -21,8 +21,8 @@ describe Npmdc do
       expect { subject }.to write_output(output_msg)
     end
 
-    it 'displays correct colors', :color do
-      options[:color] = true
+    it 'displays correct colors' do
+      options['color'] = true
       output_msg = <<~output
         Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!\n\e[0;33;49m
         Run `npm install` to install missing packages.\e[0m
@@ -46,7 +46,7 @@ describe Npmdc do
     end
 
     it 'displays correct colors' do
-      options[:color] = true
+      options['color'] = true
  
       output_msg = <<~output
         There is no `package.json` file inside './spec/' directory.

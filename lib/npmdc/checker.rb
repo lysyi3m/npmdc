@@ -14,7 +14,7 @@ module Npmdc
     DEPENDENCIES = %w(dependencies devDependencies).freeze
 
     def initialize(options)
-      @path = options[:path] || Dir.pwd
+      @path = options['path'] || Dir.pwd
       @formatter = Npmdc::Formatter.(options)
       @dependencies_count = 0
       @missing_dependencies = Set.new

@@ -8,7 +8,9 @@ module Npmdc
     desc 'check', 'Run check'
     method_option :path, desc: 'Path to package.json config'
     method_option :color, desc: 'Enable color', type: :boolean, default: true
-    method_option :format, desc: "Output format, possible values: #{Npmdc::Formatter::FORMATTERS.keys.join(", ")}"
+    method_option :format, aliases: [:f],
+                           desc: "Output format,
+                           possible values: #{Npmdc::Formatter::FORMATTERS.keys.join(", ")}"
 
     def check
       Npmdc.call(options)
