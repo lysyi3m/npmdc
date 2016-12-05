@@ -1,4 +1,4 @@
-### 0.1.0 First release
+### 0.1.0
 
 Initial implementation of Npmdc gem with following features:
 
@@ -9,7 +9,7 @@ Initial implementation of Npmdc gem with following features:
 * Standalone CLI tool
 
 
-### 0.1.1 Compatibility improvemnts
+### 0.1.1
 
 * Now works with Ruby >= 2.2.0
 
@@ -44,3 +44,14 @@ Thanks to @aderyabin !
 ### 0.2.2
 
 * Fixed runtime dependencies
+
+
+### 0.2.3
+
+Thanks to @palkan !
+
+* Improved Rails integration
+
+* Add Rails integration specs
+
+* Minor improvemnts
