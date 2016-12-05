@@ -43,4 +43,15 @@ Thanks to @aderyabin !
 
 ### 0.2.2
 
+Thanks to @palkan !
+
 * Fixed runtime dependencies
+
+
+### 0.2.3
+
+* Improved Rails integration
+
+* Add Rails integration specs
+
+* Minor improvemnts
