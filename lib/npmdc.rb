@@ -1,5 +1,5 @@
 require "npmdc/checker"
-require "npmdc/railtie" if defined?(Rails)
+require "npmdc/engine" if defined?(Rails)
 require "npmdc/version"
 
 module Npmdc
