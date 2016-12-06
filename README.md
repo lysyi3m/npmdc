@@ -58,6 +58,7 @@ _Options:_
 
 * -f, --format FORMAT - Set format of output
 
+* -t, --types dependencies devDependencies - Dependency types to check
 
 ## Development
 

@@ -54,7 +54,7 @@ Thanks to @palkan !
 
 * Add Rails integration specs
 
-* Minor improvemnts
+* Minor improvements
 
 
 ### 0.2.4
