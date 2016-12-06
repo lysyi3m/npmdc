@@ -9,12 +9,13 @@ module Npmdc
     method_option :path, desc: 'Path to package.json config'
     method_option :color, desc: 'Enable color', type: :boolean, default: true
     method_option :types, aliases: [:t],
-                          desc: 'types for check',
+                          desc: 'Dependency types to check',
                           type: :array,
+                          enum: Npmdc::Config::DEPEPENDENCY_TYPES,
                           default: Npmdc::Config::DEPEPENDENCY_TYPES
     method_option :format, aliases: [:f],
-                           desc: "Output format,
-                           possible values: #{Npmdc::Formatter::FORMATTERS.keys.join(", ")}"
+                           desc: 'Output format',
+                           enum: Npmdc::Formatter::FORMATTERS.keys
 
     def check
       Npmdc.call(options)
