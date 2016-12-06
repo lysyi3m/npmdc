@@ -1,12 +1,15 @@
 module Npmdc
   class Config
-    attr_accessor :color, :format, :output
+    DEPEPENDENCY_TYPES = %w(dependencies devDependencies).freeze
+
+    attr_accessor :color, :format, :output, :types
     attr_writer :path
 
     def initialize
       @color = true
       @format = :short
       @output = STDOUT
+      @types = DEPEPENDENCY_TYPES
     end
 
     def path

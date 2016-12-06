@@ -9,12 +9,11 @@ module Npmdc
     extend Forwardable
     include Npmdc::Errors
 
-    attr_reader :path, :formatter
-
-    DEPENDENCIES = %w(dependencies devDependencies).freeze
+    attr_reader :path, :formatter, :types
 
     def initialize(options)
       @path = options.fetch('path', Npmdc.config.path)
+      @types = options.fetch('types', Npmdc.config.types)
       @formatter = Npmdc::Formatter.(options)
       @dependencies_count = 0
       @missing_dependencies = Set.new
@@ -26,8 +25,7 @@ module Npmdc
       begin
         success = false
         package_json_data = package_json(path)
-
-        DEPENDENCIES.each do |dep|
+        @types.each do |dep|
           check_dependencies(package_json_data[dep], dep) if package_json_data[dep]
         end
 
