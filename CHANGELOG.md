@@ -62,3 +62,12 @@ Thanks to @palkan !
 * Fixed Rails integration
 
 * Fixed options handling from config
+
+
+### 0.2.5
+
+Thanks to @aderyabin !
+
+* Added new `types` option
+
+* Added specs for 'short' formatter
