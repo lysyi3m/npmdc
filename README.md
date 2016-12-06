@@ -5,7 +5,7 @@
 npmdc
 =========
 
-![Screenshot](https://lysyi3m-pluto.s3.amazonaws.com/dropshare/Screen-Shot-2016-12-06-10-20-47.png)
+![Screenshot](https://lysyi3m-pluto.s3.amazonaws.com/dropshare/Снимок-экрана-2016-12-06-в-10.27.02.png)
 
 
 **NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file.
