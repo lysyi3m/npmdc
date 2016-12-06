@@ -55,3 +55,10 @@ Thanks to @palkan !
 * Add Rails integration specs
 
 * Minor improvemnts
+
+
+### 0.2.4
+
+* Fixed Rails integration
+
+* Fixed options handling from config
