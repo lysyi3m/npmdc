@@ -40,6 +40,7 @@ YourApp::Application.configure do
   config.npmdc.path   = "/path/to/your/frontend/code/dir" # `Rails.root` by default
   config.npmdc.format = "doc"                             # `short`, `doc`, `progress`. `short` by default
   config.npmdc.color  = false                             # `true` by default
+  config.npmdc.types  = ["dependencies"]                  # `["dependencies", "devDependencies"]` by default
 end
 ```
 
