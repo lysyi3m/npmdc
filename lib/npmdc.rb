@@ -6,6 +6,11 @@ module Npmdc
   class << self
     def call(options = {})
       Npmdc::Checker.new(options).call
+
+    rescue Npmdc::Errors::UnknownFormatter => e
+      Npmdc.config.output.puts "Unknown '#{e.message}' formatter"
+
+      false
     end
 
     def config
