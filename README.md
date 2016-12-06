@@ -53,14 +53,16 @@ $ bundle exec npmdc [options]
 
 _Options:_
 
-* --path PATH - Path to frontend code
+```bash
+      [--path=PATH]            # Path to package.json config
+      [--color], [--no-color]  # Enable color
+                               # Default: true
+  t, [--types=one two three]   # types for check
+                               # Default: ["dependencies", "devDependencies"]
+  f, [--format=FORMAT]         # Output format,
+                               # possible values: progress, doc, short
 
-* --color - Disable color formatting of output
-
-* -f, --format FORMAT - Set format of output
-
-* -t, --types dependencies devDependencies - Dependency types to check
-
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
