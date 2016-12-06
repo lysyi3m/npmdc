@@ -5,12 +5,15 @@
 npmdc
 =========
 
+![Screenshot](https://lysyi3m-pluto.s3.amazonaws.com/dropshare/Screen-Shot-2016-12-06-10-20-47.png)
+
+
 **NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file.
+
 
 <a href="https://evilmartians.com/?utm_source=npmdc">
   <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54">
 </a>
-
 
 ## Installation
 
