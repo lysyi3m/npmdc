@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Npmdc do
   let(:path) { nil }
-  let(:options) { { 'color' => false, 'path' => path } }
+  let(:format) { 'doc' }
+  let(:options) { { 'color' => false, 'path' => path, 'format' => format } }
 
   subject { described_class.call(options) }
 
@@ -47,7 +48,7 @@ describe Npmdc do
 
     it 'displays correct colors' do
       options['color'] = true
- 
+
       output_msg = <<~output
         There is no `package.json` file inside './spec/' directory.
       output
@@ -70,6 +71,18 @@ describe Npmdc do
   context 'incorrect json' do
     let(:path) { './spec/files/case_4' }
     let(:output_msg) { "Can't parse JSON file ./spec/files/case_4/package.json\n" }
+
+    it { is_expected.to be false }
+
+    it 'displays correct message' do
+      expect { subject }.to write_output(output_msg)
+    end
+  end
+
+  context 'unknown formatter' do
+    let(:path) { './spec/files/case_2/' }
+    let(:format) { 'whatever' }
+    let(:output_msg) { "Unknown 'whatever' formatter\n" }
 
     it { is_expected.to be false }
 

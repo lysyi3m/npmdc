@@ -59,9 +59,9 @@ _Options:_
                                # Default: true
   t, [--types=one two three]   # types for check
                                # Default: ["dependencies", "devDependencies"]
-  f, [--format=FORMAT]         # Output format,
-                               # possible values: progress, doc, short
-
+                               # Possible values: dependencies, devDependencies
+  f, [--format=FORMAT]         # Output format
+                               # Possible values: progress, doc, short
 ```
 ## Development
 
