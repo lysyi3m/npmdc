@@ -15,6 +15,7 @@ module Npmdc
     end
 
     class CheckerError < Error; end
+    class ConfigurationError < Error; end
 
     class NoNodeModulesError < CheckerError
       def banner
@@ -47,7 +48,13 @@ module Npmdc
       end
     end
 
-    # Configuration Errors
-    class UnknownFormatter < StandardError; end
+
+    class UnknownFormatter < ConfigurationError
+      def banner
+        formatter = options.fetch(:formatter)
+
+        "Unknown '#{formatter}' formatter"
+      end
+    end
   end
 end

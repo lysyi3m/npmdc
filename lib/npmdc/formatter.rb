@@ -19,7 +19,7 @@ module Npmdc
       private
 
       def klass(fmt)
-        FORMATTERS[fmt.to_sym] || raise(Npmdc::Errors::UnknownFormatter, fmt)
+        FORMATTERS[fmt.to_sym] || raise(Npmdc::Errors::UnknownFormatter, formatter: fmt)
       end
     end
   end
