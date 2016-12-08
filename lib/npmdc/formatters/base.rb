@@ -33,6 +33,20 @@ module Npmdc
         @output.puts "Checking #{type}:"
       end
 
+      def error_output(error)
+        banner = error.banner
+        case banner
+        when Array
+          error.banner.each do |message|
+            output(*message)
+          end
+        else
+          output(banner)
+        end
+      end
+
+      private
+
       def color_message(message, status = nil)
         if @disable_colorization || !status
           message

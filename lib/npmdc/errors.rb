@@ -19,7 +19,10 @@ module Npmdc
     class NoNodeModulesError < CheckerError
       def banner
         path = options.fetch(:path)
-        "Failed! Can't find `node_modules` folder inside '#{path}' directory!"
+        [
+          "Can't find `node_modules` folder inside '#{path}' directory!",
+          ["\nRun `npm install` to install missing packages.", :warn]
+        ]
       end
     end
 

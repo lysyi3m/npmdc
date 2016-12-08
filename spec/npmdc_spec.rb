@@ -14,7 +14,7 @@ describe Npmdc do
 
     it 'displays correct message' do
       output_msg = <<~output
-        Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!
+        Can't find `node_modules` folder inside './spec/files/case_1/' directory!
 
         Run `npm install` to install missing packages.
       output
@@ -25,7 +25,7 @@ describe Npmdc do
     it 'displays correct colors' do
       options['color'] = true
       output_msg = <<~output
-        Failed! Can't find `node_modules` folder inside './spec/files/case_1/' directory!\n\e[0;33;49m
+        Can't find `node_modules` folder inside './spec/files/case_1/' directory!\n\e[0;33;49m
         Run `npm install` to install missing packages.\e[0m
       output
 

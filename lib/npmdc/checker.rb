@@ -19,7 +19,10 @@ module Npmdc
       @missing_dependencies = Set.new
     end
 
-    delegate [:output, :dep_output, :check_start_output, :check_finish_output] => :formatter
+    delegate [
+      :output, :error_output, :dep_output,
+      :check_start_output, :check_finish_output
+    ] => :formatter
 
     def call
       begin
@@ -29,12 +32,8 @@ module Npmdc
           check_dependencies(package_json_data[dep], dep) if package_json_data[dep]
         end
 
-      rescue NoNodeModulesError => e
-        output(e.banner)
-        output("\nRun `npm install` to install missing packages.", :warn)
-
       rescue CheckerError => e
-        output(e.banner)
+        error_output(e)
       else
         success = true unless !@missing_dependencies.empty?
       ensure
@@ -81,10 +80,12 @@ module Npmdc
 
     def check_dependencies(deps, type)
       check_start_output(type)
+
       deps.each_key do |dep|
         @dependencies_count += 1
         check_dependency(dep, deps[dep])
       end
+
       check_finish_output
     end
 
