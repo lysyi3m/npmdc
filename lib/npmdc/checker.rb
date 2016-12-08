@@ -30,17 +30,11 @@ module Npmdc
         end
 
       rescue NoNodeModulesError => e
-        output("Failed! Can't find `node_modules` folder inside '#{e.message}' directory!")
+        output(e.banner)
         output("\nRun `npm install` to install missing packages.", :warn)
 
-      rescue WrongPathError => e
-        output("There is no '#{e.message}' directory.")
-
-      rescue MissedPackageError => e
-        output("There is no `package.json` file inside '#{e.message}' directory.")
-
-      rescue JsonParseError => e
-        output("Can't parse JSON file #{e.message}")
+      rescue CheckerError => e
+        output(e.banner)
       else
         success = true unless !@missing_dependencies.empty?
       ensure
@@ -63,7 +57,7 @@ module Npmdc
     def installed_modules
       @installed_modules ||= begin
         modules_directory = File.join(path, 'node_modules')
-        raise NoNodeModulesError, path unless Dir.exist?(modules_directory)
+        raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
 
         Dir.glob("#{modules_directory}/*").each_with_object({}) do |file_path, modules|
           next unless File.directory?(file_path)
@@ -73,14 +67,15 @@ module Npmdc
     end
 
     def package_json(directory, filename = 'package.json')
-      raise WrongPathError, directory unless Dir.exist?(directory)
-      file_path = File.join(directory, filename)
-      raise MissedPackageError, directory unless File.file?(file_path)
+      raise WrongPathError, directory: directory unless Dir.exist?(directory)
+
+      path = File.join(directory, filename)
+      raise MissedPackageError, directory: directory unless File.file?(path)
 
       begin
-        JSON.parse(File.read(file_path))
+        JSON.parse(File.read(path))
       rescue JSON::ParserError
-        raise JsonParseError, file_path
+        raise JsonParseError, path: path
       end
     end
 
