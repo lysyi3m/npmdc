@@ -15,7 +15,7 @@ module Npmdc
                           default: Npmdc::Config::DEPEPENDENCY_TYPES
     method_option :format, aliases: [:f],
                            desc: 'Output format',
-                           enum: Npmdc::Formatter::FORMATTERS.keys
+                           enum: Npmdc::Formatter::FORMATTERS.keys.map(&:to_s)
 
     def check
       Npmdc.call(options)
