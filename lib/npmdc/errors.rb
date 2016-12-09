@@ -10,7 +10,7 @@ module Npmdc
       end
 
       def banner
-        raise NotImplementedError, '#banner has to be implemented in subclass'
+        raise(NotImplementedError, '#banner has to be implemented in subclass')
       end
     end
 

@@ -66,15 +66,15 @@ module Npmdc
     end
 
     def package_json(directory, filename = 'package.json')
-      raise WrongPathError, directory: directory unless Dir.exist?(directory)
+      raise(WrongPathError, directory: directory) unless Dir.exist?(directory)
 
       path = File.join(directory, filename)
-      raise MissedPackageError, directory: directory unless File.file?(path)
+      raise(MissedPackageError, directory: directory) unless File.file?(path)
 
       begin
         JSON.parse(File.read(path))
       rescue JSON::ParserError
-        raise JsonParseError, path: path
+        raise(JsonParseError, path: path)
       end
     end
 
