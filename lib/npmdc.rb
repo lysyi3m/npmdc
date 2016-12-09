@@ -7,8 +7,8 @@ module Npmdc
     def call(options = {})
       Npmdc::Checker.new(options).call
 
-    rescue Npmdc::Errors::UnknownFormatter => e
-      Npmdc.config.output.puts "Unknown '#{e.message}' formatter"
+    rescue Npmdc::Errors::ConfigurationError => e
+      Npmdc.config.output.puts e.banner
 
       false
     end

@@ -19,7 +19,10 @@ module Npmdc
       @missing_dependencies = Set.new
     end
 
-    delegate [:output, :dep_output, :check_start_output, :check_finish_output] => :formatter
+    delegate [
+      :output, :error_output, :dep_output,
+      :check_start_output, :check_finish_output
+    ] => :formatter
 
     def call
       begin
@@ -29,18 +32,8 @@ module Npmdc
           check_dependencies(package_json_data[dep], dep) if package_json_data[dep]
         end
 
-      rescue NoNodeModulesError => e
-        output("Failed! Can't find `node_modules` folder inside '#{e.message}' directory!")
-        output("\nRun `npm install` to install missing packages.", :warn)
-
-      rescue WrongPathError => e
-        output("There is no '#{e.message}' directory.")
-
-      rescue MissedPackageError => e
-        output("There is no `package.json` file inside '#{e.message}' directory.")
-
-      rescue JsonParseError => e
-        output("Can't parse JSON file #{e.message}")
+      rescue CheckerError => e
+        error_output(e)
       else
         success = true unless !@missing_dependencies.empty?
       ensure
@@ -63,7 +56,7 @@ module Npmdc
     def installed_modules
       @installed_modules ||= begin
         modules_directory = File.join(path, 'node_modules')
-        raise NoNodeModulesError, path unless Dir.exist?(modules_directory)
+        raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
 
         Dir.glob("#{modules_directory}/*").each_with_object({}) do |file_path, modules|
           next unless File.directory?(file_path)
@@ -73,23 +66,26 @@ module Npmdc
     end
 
     def package_json(directory, filename = 'package.json')
-      raise WrongPathError, directory unless Dir.exist?(directory)
-      file_path = File.join(directory, filename)
-      raise MissedPackageError, directory unless File.file?(file_path)
+      raise(WrongPathError, directory: directory) unless Dir.exist?(directory)
+
+      path = File.join(directory, filename)
+      raise(MissedPackageError, directory: directory) unless File.file?(path)
 
       begin
-        JSON.parse(File.read(file_path))
+        JSON.parse(File.read(path))
       rescue JSON::ParserError
-        raise JsonParseError, file_path
+        raise(JsonParseError, path: path)
       end
     end
 
     def check_dependencies(deps, type)
       check_start_output(type)
+
       deps.each_key do |dep|
         @dependencies_count += 1
         check_dependency(dep, deps[dep])
       end
+
       check_finish_output
     end
 
