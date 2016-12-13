@@ -94,18 +94,22 @@ module Npmdc
       installed_module = installed_modules[dep]
 
       if installed_module
-        if !installed_module.key?('version') || !SemanticRange.valid(installed_module['version'])
-          @missing_dependencies << "#{dep}@#{version}"
-          dep_output(dep, :failure)
-        elsif SemanticRange.satisfies(installed_module['version'], version)
-          dep_output(dep, :success)
-        else
-          @missing_dependencies << "#{dep}@#{version}"
-          dep_output("#{dep} expected version '#{version}' but got '#{installed_module['version']}'", :failure)
-        end
+        check_version(installed_module, dep, version)
       else
         @missing_dependencies << "#{dep}@#{version}"
         dep_output(dep, :failure)
+      end
+    end
+
+    def check_version(installed_module, dep, version)
+      if !installed_module.key?('version') || !SemanticRange.valid(installed_module['version'])
+        @missing_dependencies << "#{dep}@#{version}"
+        dep_output(dep, :failure)
+      elsif SemanticRange.satisfies(installed_module['version'], version)
+        dep_output(dep, :success)
+      else
+        @missing_dependencies << "#{dep}@#{version}"
+        dep_output("#{dep} expected version '#{version}' but got '#{installed_module['version']}'", :failure)
       end
     end
   end
