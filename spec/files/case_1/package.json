@@ -3,7 +3,7 @@
   "main": "index.js",
   "dependencies": {
     "foo": "1.0.0",
-    "bar": "1.0.0"
+    "bar": "2.0.0"
   },
   "license": "ISC"
 }

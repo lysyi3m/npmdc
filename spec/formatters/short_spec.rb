@@ -32,9 +32,9 @@ describe Npmdc::Formatters::Short do
     it 'returns correct message' do
       output_msg = <<~output
         Following dependencies required by your package.json file are missing or not installed properly:
-          * bar@1.0.0
-          * foobar@1.0.0
-          * foobarfoo@1.0.0
+          * bar@2.0.0
+          * foobar@3.0.0
+          * foobarfoo@4.0.0
 
         Run `npm install` to install 3 missing packages.
       output
@@ -46,9 +46,9 @@ describe Npmdc::Formatters::Short do
       options['color'] = true
       output_msg = <<~output
         Following dependencies required by your package.json file are missing or not installed properly:
-          * bar@1.0.0
-          * foobar@1.0.0
-          * foobarfoo@1.0.0
+          * bar@2.0.0
+          * foobar@3.0.0
+          * foobarfoo@4.0.0
         \e[0;33;49m
         Run `npm install` to install 3 missing packages.\e[0m
       output
