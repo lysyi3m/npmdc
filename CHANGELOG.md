@@ -71,3 +71,10 @@ Thanks to @aderyabin !
 * Added new `types` option
 
 * Added specs for 'short' formatter
+
+
+### 0.3.0
+
+* Added new version check functionality
+
+* Added specs for version check
