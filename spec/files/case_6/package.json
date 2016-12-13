@@ -1,0 +1,14 @@
+{
+  "name": "case_2",
+  "main": "index.js",
+  "author": "",
+  "dependencies": {
+    "foo": "1.0.0",
+    "bar": ">= 1.0.0",
+    "foobar": "> 1.0.0",
+    "foobarfoo": "<= 1.0.0",
+    "foobarfoobar": "< 1.0.0",
+    "foobarfoobarfoo": ">= 1.0.0 < 2.0.0"
+  },
+  "license": "ISC"
+}

@@ -118,4 +118,32 @@ describe Npmdc do
       expect { subject }.to write_output(output_msg)
     end
   end
+
+  context 'success version check' do
+    let(:path) { './spec/files/case_5' }
+
+    it { is_expected.to be true }
+
+    it 'returns correct message' do
+      output_msg = <<~output
+        Checked 6 packages. Everything is ok.
+      output
+
+      expect { subject }.to write_output(output_msg)
+    end
+  end
+
+  context 'failure version check' do
+    let(:path) { './spec/files/case_6' }
+
+    it { is_expected.to be false }
+
+    it 'returns correct message' do
+      output_msg = <<~output
+        Run `npm install` to install 5 missing packages.
+      output
+
+      expect { subject }.to write_output(output_msg)
+    end
+  end
 end
