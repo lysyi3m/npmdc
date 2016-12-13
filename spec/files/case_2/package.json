@@ -4,10 +4,10 @@
   "author": "",
   "dependencies": {
     "foo": "1.0.0",
-    "bar": "1.0.0"
+    "bar": "2.0.0"
   },
   "devDependencies": {
-    "foobar": "1.0.0"
+    "foobar": "3.0.0"
   },
   "license": "ISC"
 }
