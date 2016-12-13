@@ -1,8 +1,9 @@
 require 'colorize'
 require 'json'
+require 'forwardable'
+require 'semantic_range'
 require 'npmdc/formatter'
 require 'npmdc/errors'
-require 'forwardable'
 
 module Npmdc
   class Checker
@@ -90,8 +91,18 @@ module Npmdc
     end
 
     def check_dependency(dep, version)
-      if installed_modules[dep]
-        dep_output(dep, :success)
+      installed_module = installed_modules[dep]
+
+      if installed_module
+        if !installed_module.key?('version') || !SemanticRange.valid(installed_module['version'])
+          @missing_dependencies << "#{dep}@#{version}"
+          dep_output(dep, :failure)
+        elsif SemanticRange.satisfies(installed_module['version'], version)
+          dep_output(dep, :success)
+        else
+          @missing_dependencies << "#{dep}@#{version}"
+          dep_output("#{dep} expected version '#{version}' but got '#{installed_module['version']}'", :failure)
+        end
       else
         @missing_dependencies << "#{dep}@#{version}"
         dep_output(dep, :failure)
