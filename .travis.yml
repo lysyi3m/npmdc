@@ -1,11 +1,15 @@
 sudo: false
 language: ruby
 cache: bundler
-rvm:
-  - 2.3.3
-
-gemfile:
-  - gemfiles/rails42.gemfile
-  - gemfiles/rails5.gemfile
+matrix:
+  include:
+    - rvm: 2.3.3
+      gemfile: gemfiles/rails42.gemfile
+    - rvm: 2.3.3
+      gemfile: gemfiles/rails5.gemfile
+    - rvm: 2.2
+      gemfile: gemfiles/rails42.gemfile
+    - rvm: 2.1
+      gemfile: gemfiles/rails42.gemfile
 
 before_install: gem install bundler -v 1.13.6

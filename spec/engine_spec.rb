@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Npmdc::Engine do
+  using StringStripHeredoc
+
   let(:app) { Rails.application }
 
   it "adds npmdc config" do
@@ -20,7 +22,7 @@ describe Npmdc::Engine do
 
     it "works" do
       expect(initializer).not_to be_nil
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Checking dependencies:
           ✗ foo
           ✗ bar
