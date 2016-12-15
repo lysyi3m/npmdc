@@ -1,4 +1,4 @@
-Rails.application.configure do
+Dummy::Application.configure do
   config.eager_load = false
   config.npmdc.format = :doc
   config.npmdc.color = false
