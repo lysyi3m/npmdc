@@ -78,3 +78,10 @@ Thanks to @aderyabin !
 * Added new version check functionality
 
 * Added specs for version check
+
+
+### 0.3.1
+
+Thanks to @palkan !
+
+* Added support for Ruby >= 2.1 and Rails 3.2
