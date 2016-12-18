@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Npmdc do
+  using StringStripHeredoc
+
   let(:path) { nil }
   let(:format) { 'doc' }
   let(:options) { { 'color' => false, 'path' => path, 'format' => format } }
@@ -13,7 +15,7 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'displays correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Can't find `node_modules` folder inside './spec/files/case_1/' directory!
 
         Run `npm install` to install missing packages.
@@ -24,8 +26,9 @@ describe Npmdc do
 
     it 'displays correct colors' do
       options['color'] = true
-      output_msg = <<~output
-        Can't find `node_modules` folder inside './spec/files/case_1/' directory!\n\e[0;33;49m
+      output_msg = <<-output.strip_heredoc
+        Can't find `node_modules` folder inside './spec/files/case_1/' directory!
+        \e[0;33;49m
         Run `npm install` to install missing packages.\e[0m
       output
 
@@ -39,7 +42,7 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'displays correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         There is no `package.json` file inside './spec/' directory.
       output
 
@@ -49,7 +52,7 @@ describe Npmdc do
     it 'displays correct colors' do
       options['color'] = true
 
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         There is no `package.json` file inside './spec/' directory.
       output
 
@@ -97,7 +100,7 @@ describe Npmdc do
     it { is_expected.to be true }
 
     it 'returns correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Checked 3 packages. Everything is ok.
       output
 
@@ -111,7 +114,7 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Run `npm install` to install 3 missing packages.
       output
 
@@ -125,7 +128,7 @@ describe Npmdc do
     it { is_expected.to be true }
 
     it 'returns correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Checked 6 packages. Everything is ok.
       output
 
@@ -139,7 +142,7 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Run `npm install` to install 5 missing packages.
       output
 

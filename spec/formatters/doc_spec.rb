@@ -1,13 +1,15 @@
 require 'spec_helper'
 
 describe Npmdc::Formatters::Documentation do
+  using StringStripHeredoc
+
   let(:path) { './spec/files/case_2/' }
   let(:options) { { 'color' => false, 'format' => 'doc', 'path' => path } }
 
   subject { Npmdc.call(options) }
 
   it 'returns correct message' do
-    output_msg = <<~output
+    output_msg = <<-output.strip_heredoc
       Checking dependencies:
         ✓ foo
         ✓ bar
@@ -23,7 +25,7 @@ describe Npmdc::Formatters::Documentation do
 
   it 'returns correct colors' do
     options['color'] = true
-    output_msg = <<~output
+    output_msg = <<-output.strip_heredoc
       Checking dependencies:
       \e[0;32;49m  ✓ foo\e[0m
       \e[0;32;49m  ✓ bar\e[0m

@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'bin'
   spec.executables   = ['npmdc']
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>= 2.2.2'
+  spec.required_ruby_version = '>= 2.1.0'
   spec.add_dependency 'thor', '> 0.18'
   spec.add_dependency 'colorize', '~> 0.8.1'
   spec.add_dependency 'semantic_range', '~> 1.0'

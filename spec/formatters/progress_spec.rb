@@ -1,13 +1,15 @@
 require 'spec_helper'
 
 describe Npmdc::Formatters::Progress do
+  using StringStripHeredoc
+
   let(:path) { './spec/files/case_2/' }
   let(:options) { { 'color' => false, 'format' => 'progress', 'path' => path } }
 
   subject { Npmdc.call(options) }
 
   it 'returns correct message' do
-    output_msg = <<~output
+    output_msg = <<-output.strip_heredoc
       Checking dependencies:
       ..
 
@@ -23,7 +25,7 @@ describe Npmdc::Formatters::Progress do
   it 'returns correct colors' do
     options['color'] = true
 
-    output_msg = <<~output
+    output_msg = <<-output.strip_heredoc
       Checking dependencies:
       \e[0;32;49m.\e[0m\e[0;32;49m.\e[0m
 
@@ -42,7 +44,7 @@ describe Npmdc::Formatters::Progress do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Checking dependencies:
         .F
 
@@ -62,7 +64,7 @@ describe Npmdc::Formatters::Progress do
 
     it 'returns correct colors' do
       options['color'] = true
-      output_msg = <<~output
+      output_msg = <<-output.strip_heredoc
         Checking dependencies:
         \e[0;32;49m.\e[0m\e[0;31;49mF\e[0m
 
