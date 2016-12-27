@@ -11,8 +11,8 @@ module Npmdc
       Npmdc.config.path = Rails.root unless Npmdc.config.path?
     end
 
-    initializer "npmdc.development_only" do
-      if config.npmdc.development_only == true && !Rails.env.development?
+    initializer "npmdc.environment_check" do
+      unless config.npmdc.environments.include?(Rails.env)
         abort <<-END.strip_heredoc
           Npmdc is trying to be activated in the #{Rails.env} environment.
           Probably, this is a mistake. To ensure it's only activated in development
@@ -21,7 +21,7 @@ module Npmdc
           If you still want to run it in the #{Rails.env} environment (and know
           what you are doing), put this in your Rails application
           configuration:
-              config.npmdc.development_only = false
+              config.npmdc.environments = ['development', '#{Rails.env}']
         END
       end
     end

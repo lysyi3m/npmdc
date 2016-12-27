@@ -1,8 +1,9 @@
 module Npmdc
   class Config
     DEPEPENDENCY_TYPES = %w(dependencies devDependencies).freeze
+    ENVIRONMENTS = %w(development).freeze
 
-    attr_accessor :color, :format, :output, :types, :development_only
+    attr_accessor :color, :format, :output, :types, :environments
     attr_writer :path
 
     def initialize
@@ -10,7 +11,7 @@ module Npmdc
       @format = :short
       @output = STDOUT
       @types = DEPEPENDENCY_TYPES
-      @development_only = true
+      @environments = ENVIRONMENTS
     end
 
     def path

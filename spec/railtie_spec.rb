@@ -55,18 +55,20 @@ describe Npmdc::Railtie do
       end
     end
 
-    context "development_only" do
-      let(:name) { "npmdc.development_only"}
+    context "environment_check" do
+      let(:name) { "npmdc.environment_check"}
 
-      before { allow(Rails.env).to receive(:development?).and_return(false) }
+      before do
+        allow(Rails).to receive(:env).and_return(
+          ActiveSupport::StringInquirer.new("test")
+        )
+      end
 
       it "aborts initialization" do
         within_new_app do |app|
           initializer = app.initializers.find { |i| i.name == name }
 
           expect_any_instance_of(described_class).to receive(:abort)
-
-          app.config.npmdc.development_only = true
 
           initializer.run(app)
         end
@@ -78,7 +80,7 @@ describe Npmdc::Railtie do
 
           expect_any_instance_of(described_class).not_to receive(:abort)
 
-          app.config.npmdc.development_only = false
+          app.config.npmdc.environments = %w(test)
 
           initializer.run(app)
         end
