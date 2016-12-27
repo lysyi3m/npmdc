@@ -85,3 +85,10 @@ Thanks to @aderyabin !
 Thanks to @palkan !
 
 * Added support for Ruby >= 2.1 and Rails 3.2
+
+
+### 0.3.2
+
+Thanks to @sponomarev !
+
+* Added support for environment-based configuration
