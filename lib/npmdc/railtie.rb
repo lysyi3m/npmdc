@@ -1,7 +1,9 @@
-require 'npmdc'
+require 'npmdc/core/string_strip_heredoc'
 
 module Npmdc
   class Railtie < Rails::Railtie # :nodoc:
+    using StringStripHeredoc
+
     # Make config accessible through application config
     config.npmdc = Npmdc.config
 
