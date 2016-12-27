@@ -20,7 +20,7 @@ npmdc
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'npmdc'
+gem 'npmdc', group: :development
 ```
 
 And then execute:
@@ -37,10 +37,11 @@ Or install it yourself as:
 
 ```ruby
 YourApp::Application.configure do
-  config.npmdc.path   = "/path/to/your/frontend/code/dir" # `Rails.root` by default
-  config.npmdc.format = "doc"                             # `short`, `doc`, `progress`. `short` by default
-  config.npmdc.color  = false                             # `true` by default
-  config.npmdc.types  = ["dependencies"]                  # `["dependencies", "devDependencies"]` by default
+  config.npmdc.path          = "/path/to/your/frontend/code/dir" # `Rails.root` by default
+  config.npmdc.format        = "doc"                             # `short`, `doc`, `progress`. `short` by default
+  config.npmdc.color         = false                             # `true` by default
+  config.npmdc.types         = ["dependencies"]                  # `["dependencies", "devDependencies"]` by default
+  config.npmdc.environments  = ["development"]                   # `development` only by default
 end
 ```
 
