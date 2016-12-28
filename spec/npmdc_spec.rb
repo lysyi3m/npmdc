@@ -85,12 +85,12 @@ describe Npmdc do
   context 'unknown formatter' do
     let(:path) { './spec/files/case_2/' }
     let(:format) { 'whatever' }
-    let(:output_msg) { "Unknown 'whatever' formatter\n" }
-
-    it { is_expected.to be false }
+    let(:output_msg) { "Unknown 'whatever' formatter" }
 
     it 'displays correct message' do
-      expect { subject }.to write_output(output_msg)
+      expect(described_class).to receive(:abort).with(output_msg)
+
+      subject
     end
   end
 
