@@ -15,6 +15,7 @@ module Npmdc
     def initialize(options)
       @path = options.fetch('path', Npmdc.config.path)
       @types = options.fetch('types', Npmdc.config.types)
+      @abort_on_failure = options.fetch('abort_on_failure', Npmdc.config.abort_on_failure)
       @formatter = Npmdc::Formatter.(options)
       @dependencies_count = 0
       @missing_dependencies = Set.new
@@ -26,30 +27,24 @@ module Npmdc
     ] => :formatter
 
     def call
-      begin
-        success = false
-        package_json_data = package_json(path)
-        @types.each do |dep|
-          check_dependencies(package_json_data[dep], dep) if package_json_data[dep]
-        end
-
-      rescue CheckerError => e
-        error_output(e)
-      else
-        success = true unless !@missing_dependencies.empty?
-      ensure
-        if !@missing_dependencies.empty?
-          output("Following dependencies required by your package.json file are missing or not installed properly:")
-          @missing_dependencies.each do |dep|
-            output("  * #{dep}")
-          end
-          output("\nRun `npm install` to install #{@missing_dependencies.size} missing packages.", :warn)
-        elsif success
-          output("Checked #{@dependencies_count} packages. Everything is ok.", :success)
-        end
+      package_json_data = package_json(path)
+      @types.each do |dep|
+        check_dependencies(package_json_data[dep], dep) if package_json_data[dep]
       end
 
-      success
+      if !@missing_dependencies.empty?
+        raise(MissedDependencyError, dependencies: @missing_dependencies)
+      end
+
+      output("Checked #{@dependencies_count} packages. Everything is ok.", :success)
+
+      true
+    rescue CheckerError => e
+      error_output(e)
+
+      exit(1) if @abort_on_failure
+
+      false
     end
 
     private

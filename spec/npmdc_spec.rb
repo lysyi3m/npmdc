@@ -9,6 +9,26 @@ describe Npmdc do
 
   subject { described_class.call(options) }
 
+  shared_examples 'critical error' do
+    before { options['abort_on_failure'] = true }
+
+    it 'aborts current process' do
+      expect_any_instance_of(described_class::Checker).to receive(:exit).with(1)
+
+      subject
+    end
+  end
+
+  shared_examples 'non critical error' do
+    before { options['abort_on_failure'] = false }
+
+    it 'aborts current process' do
+      expect_any_instance_of(described_class::Checker).not_to receive(:abort)
+
+      subject
+    end
+  end
+
   context 'no /node_modules folder' do
     let(:path) { './spec/files/case_1/' }
 
@@ -34,6 +54,8 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'no package.json file' do
@@ -58,6 +80,8 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'unexisted path' do
@@ -69,6 +93,8 @@ describe Npmdc do
     it 'displays correct message' do
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'incorrect json' do
@@ -80,6 +106,8 @@ describe Npmdc do
     it 'displays correct message' do
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'unknown formatter' do
@@ -120,6 +148,8 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'success version check' do
@@ -148,5 +178,7 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 end

@@ -14,10 +14,29 @@ module Npmdc
       end
     end
 
-    class CheckerError < Error; end
     class ConfigurationError < Error; end
 
+    class CheckerError < Error
+        def initialize(*)
+          super
+        end
+
+        @critical = false
+
+        class << self
+          attr_reader :critical
+
+          private
+
+          def define_critical!
+            @critical = true
+          end
+        end
+    end
+
     class NoNodeModulesError < CheckerError
+      define_critical!
+
       def banner
         path = options.fetch(:path)
         [
@@ -28,6 +47,8 @@ module Npmdc
     end
 
     class WrongPathError < CheckerError
+      define_critical!
+
       def banner
         directory = options.fetch(:directory)
         "There is no '#{directory}' directory."
@@ -42,12 +63,35 @@ module Npmdc
     end
 
     class JsonParseError < CheckerError
+      define_critical!
+
       def banner
         path = options.fetch(:path)
         "Can't parse JSON file #{path}"
       end
     end
 
+    class MissedDependencyError < CheckerError
+      define_critical!
+
+      def banner
+        deps = options.fetch(:dependencies)
+
+        [
+          "Following dependencies required by your package.json file are"\
+          " missing or not installed properly:"
+        ] + msgs(deps) <<
+        [
+          "\nRun `npm install` to install #{deps.size} missing packages.", :warn
+        ]
+      end
+
+      private
+
+      def msgs(dependencies)
+        dependencies.map { |d| "  * #{d}"}
+      end
+    end
 
     class UnknownFormatter < ConfigurationError
       def banner
