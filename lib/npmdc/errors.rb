@@ -21,10 +21,15 @@ module Npmdc
           super
         end
 
+        def critical?
+          self.class.critical?
+        end
+
         @critical = false
 
         class << self
           attr_reader :critical
+          alias_method :critical?, :critical
 
           private
 

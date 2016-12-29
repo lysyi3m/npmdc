@@ -20,10 +20,10 @@ describe Npmdc do
   end
 
   shared_examples 'non critical error' do
-    before { options['abort_on_failure'] = false }
+    before { options['abort_on_failure'] = true }
 
-    it 'aborts current process' do
-      expect_any_instance_of(described_class::Checker).not_to receive(:abort)
+    it 'does not abort current process' do
+      expect_any_instance_of(described_class::Checker).not_to receive(:exit)
 
       subject
     end
@@ -81,7 +81,7 @@ describe Npmdc do
       expect { subject }.to write_output(output_msg)
     end
 
-    it_behaves_like 'critical error'
+    it_behaves_like 'non critical error'
   end
 
   context 'unexisted path' do

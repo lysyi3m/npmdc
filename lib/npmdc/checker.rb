@@ -42,7 +42,7 @@ module Npmdc
     rescue CheckerError => e
       error_output(e)
 
-      exit(1) if @abort_on_failure
+      exit(1) if @abort_on_failure && e.critical?
 
       false
     end
