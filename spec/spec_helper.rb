@@ -9,3 +9,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # disable output
 Npmdc.config.output = StringIO.new
+
+RSpec.configure do |config|
+  config.order = :random
+end

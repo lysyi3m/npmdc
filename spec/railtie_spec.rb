@@ -21,7 +21,6 @@ describe Npmdc::Railtie do
         a.config.npmdc.color = false
       end
 
-
       yield Rails.application
     end
   ensure
@@ -80,7 +79,7 @@ describe Npmdc::Railtie do
 
           expect_any_instance_of(described_class).not_to receive(:abort)
 
-          app.config.npmdc.environments = %w(test)
+          allow(app.config.npmdc).to receive(:environments).and_return(%w(test))
 
           initializer.run(app)
         end
