@@ -17,19 +17,12 @@ module Npmdc
     class ConfigurationError < Error; end
 
     class CheckerError < Error
-        def initialize(*)
-          super
-        end
-
-        def critical?
-          self.class.critical?
-        end
-
         @critical = false
 
         class << self
-          attr_reader :critical
-          alias_method :critical?, :critical
+          def critical?
+            @critical
+          end
 
           private
 
