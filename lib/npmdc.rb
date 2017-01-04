@@ -8,9 +8,7 @@ module Npmdc
       Npmdc::Checker.new(options).call
 
     rescue Npmdc::Errors::ConfigurationError => e
-      Npmdc.config.output.puts e.banner
-
-      false
+      abort(e.banner)
     end
 
     def config

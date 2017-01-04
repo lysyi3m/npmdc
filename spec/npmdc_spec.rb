@@ -9,6 +9,26 @@ describe Npmdc do
 
   subject { described_class.call(options) }
 
+  shared_examples 'critical error' do
+    before { options['abort_on_failure'] = true }
+
+    it 'aborts current process' do
+      expect_any_instance_of(described_class::Checker).to receive(:exit).with(1)
+
+      subject
+    end
+  end
+
+  shared_examples 'non critical error' do
+    before { options['abort_on_failure'] = true }
+
+    it 'does not abort current process' do
+      expect_any_instance_of(described_class::Checker).not_to receive(:exit)
+
+      subject
+    end
+  end
+
   context 'no /node_modules folder' do
     let(:path) { './spec/files/case_1/' }
 
@@ -34,6 +54,8 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'no package.json file' do
@@ -58,6 +80,8 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'non critical error'
   end
 
   context 'unexisted path' do
@@ -69,6 +93,8 @@ describe Npmdc do
     it 'displays correct message' do
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'incorrect json' do
@@ -80,17 +106,19 @@ describe Npmdc do
     it 'displays correct message' do
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'unknown formatter' do
     let(:path) { './spec/files/case_2/' }
     let(:format) { 'whatever' }
-    let(:output_msg) { "Unknown 'whatever' formatter\n" }
-
-    it { is_expected.to be false }
+    let(:output_msg) { "Unknown 'whatever' formatter" }
 
     it 'displays correct message' do
-      expect { subject }.to write_output(output_msg)
+      expect(described_class).to receive(:abort).with(output_msg)
+
+      subject
     end
   end
 
@@ -120,6 +148,8 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 
   context 'success version check' do
@@ -148,5 +178,7 @@ describe Npmdc do
 
       expect { subject }.to write_output(output_msg)
     end
+
+    it_behaves_like 'critical error'
   end
 end
