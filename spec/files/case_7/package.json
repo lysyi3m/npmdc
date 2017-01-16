@@ -1,0 +1,10 @@
+{
+  "name": "case_7",
+  "dependencies": {
+    "foo": "1.0.0",
+    "bar": "latest",
+    "foobar": "foo/foobar",
+    "foobarfoo": "git://github.com/foo/barfoo.git"
+  },
+  "license": "ISC"
+}
