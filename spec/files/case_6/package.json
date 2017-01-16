@@ -1,7 +1,5 @@
 {
-  "name": "case_2",
-  "main": "index.js",
-  "author": "",
+  "name": "case_6",
   "dependencies": {
     "foo": "1.0.0",
     "bar": ">= 1.0.0",
