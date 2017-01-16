@@ -9,6 +9,8 @@ module Npmdc
           @output.print color_message(".", status)
         when :failure
           @output.print color_message("F", status)
+        when :warn
+          @output.print color_message("W", status)
         end
       end
 

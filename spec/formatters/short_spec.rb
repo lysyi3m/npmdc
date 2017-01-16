@@ -10,7 +10,7 @@ describe Npmdc::Formatters::Short do
 
   it 'returns correct message' do
     output_msg = <<-output.strip_heredoc
-      Checked 3 packages. Everything is ok.
+      Checked 3 packages. Warnings: 0. Errors: 0. Everything is ok.
     output
 
     expect { subject }.to write_output(output_msg)
@@ -20,7 +20,7 @@ describe Npmdc::Formatters::Short do
     options['color'] = true
 
     output_msg = <<-output.strip_heredoc
-      \e[0;32;49mChecked 3 packages. Everything is ok.\e[0m
+      \e[0;32;49mChecked 3 packages. Warnings: 0. Errors: 0. Everything is ok.\e[0m
     output
 
     expect { subject }.to write_output(output_msg)

@@ -19,6 +19,7 @@ module Npmdc
       @formatter = Npmdc::Formatter.(options)
       @dependencies_count = 0
       @missing_dependencies = Set.new
+      @suspicious_dependencies = Set.new
     end
 
     delegate [
@@ -36,7 +37,12 @@ module Npmdc
         raise(MissedDependencyError, dependencies: @missing_dependencies)
       end
 
-      output("Checked #{@dependencies_count} packages. Everything is ok.", :success)
+      result_stats = "Checked #{@dependencies_count} packages. " +
+                     "Warnings: #{@suspicious_dependencies.count}. " +
+                     "Errors: #{@missing_dependencies.count}. " +
+                     "Everything is ok."
+
+      output(result_stats, :success)
 
       true
     rescue CheckerError => e
@@ -79,7 +85,13 @@ module Npmdc
 
       deps.each_key do |dep|
         @dependencies_count += 1
-        check_dependency(dep, deps[dep])
+
+        if SemanticRange.valid_range(deps[dep])
+          check_dependency(dep, deps[dep])
+        else
+          @suspicious_dependencies << "#{dep}@#{deps[dep]}"
+          dep_output("npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn)
+        end
       end
 
       check_finish_output

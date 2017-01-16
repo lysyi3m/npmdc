@@ -129,7 +129,7 @@ describe Npmdc do
 
     it 'returns correct message' do
       output_msg = <<-output.strip_heredoc
-        Checked 3 packages. Everything is ok.
+        Checked 3 packages. Warnings: 0. Errors: 0. Everything is ok.
       output
 
       expect { subject }.to write_output(output_msg)
@@ -159,7 +159,7 @@ describe Npmdc do
 
     it 'returns correct message' do
       output_msg = <<-output.strip_heredoc
-        Checked 6 packages. Everything is ok.
+        Checked 6 packages. Warnings: 0. Errors: 0. Everything is ok.
       output
 
       expect { subject }.to write_output(output_msg)

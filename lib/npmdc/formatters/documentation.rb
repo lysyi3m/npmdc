@@ -9,6 +9,8 @@ module Npmdc
           @output.puts color_message("  ✓ #{dep}", status)
         when :failure
           @output.puts color_message("  ✗ #{dep}", status)
+        when :warn
+          @output.puts color_message("  ! #{dep}", status)
         end
       end
     end
