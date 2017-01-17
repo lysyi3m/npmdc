@@ -92,3 +92,14 @@ Thanks to @palkan !
 Thanks to @sponomarev !
 
 * Added support for environment-based configuration
+
+
+### 0.4.0
+
+* Added support for "non-version" strings defined as packages version
+
+* Added output warnings for unprocessable cases
+
+Thanks to @sponomarev !
+
+* Added `abort_on_failure` option
