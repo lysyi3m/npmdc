@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Npmdc::Formatter do
-
   describe '.call' do
     subject { described_class.call(options) }
 
@@ -13,7 +12,7 @@ describe Npmdc::Formatter do
     end
 
     before do
-      stub_const('Npmdc::Formatter::FORMATTERS', { known: known_formatter })
+      stub_const('Npmdc::Formatter::FORMATTERS', known: known_formatter)
     end
 
     context 'with known formatter' do
@@ -28,7 +27,6 @@ describe Npmdc::Formatter do
       let(:options) { { 'format' => 'unknown' } }
 
       it 'raises proper exception' do
-
         expect { subject }.to raise_error(Npmdc::Errors::UnknownFormatter)
       end
     end

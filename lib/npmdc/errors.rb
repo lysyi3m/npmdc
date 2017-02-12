@@ -17,19 +17,19 @@ module Npmdc
     class ConfigurationError < Error; end
 
     class CheckerError < Error
-        @critical = false
+      @critical = false
 
-        class << self
-          def critical?
-            @critical
-          end
-
-          private
-
-          def define_critical!
-            @critical = true
-          end
+      class << self
+        def critical?
+          @critical
         end
+
+        private
+
+        def define_critical!
+          @critical = true
+        end
+      end
     end
 
     class NoNodeModulesError < CheckerError
@@ -76,18 +76,19 @@ module Npmdc
         deps = options.fetch(:dependencies)
 
         [
-          "Following dependencies required by your package.json file are"\
-          " missing or not installed properly:"
+          'Following dependencies required by your package.json file are'\
+          ' missing or not installed properly:'
         ] + msgs(deps) <<
-        [
-          "\nRun `npm install` to install #{deps.size} missing packages.", :warn
-        ]
+          [
+            "\nRun `npm install` to install #{deps.size} missing packages.",
+            :warn
+          ]
       end
 
       private
 
       def msgs(dependencies)
-        dependencies.map { |d| "  * #{d}"}
+        dependencies.map { |d| "  * #{d}" }
       end
     end
 

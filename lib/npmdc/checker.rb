@@ -15,8 +15,10 @@ module Npmdc
     def initialize(options)
       @path = options.fetch('path', Npmdc.config.path)
       @types = options.fetch('types', Npmdc.config.types)
-      @abort_on_failure = options.fetch('abort_on_failure', Npmdc.config.abort_on_failure)
-      @formatter = Npmdc::Formatter.(options)
+      @abort_on_failure = options.fetch(
+        'abort_on_failure', Npmdc.config.abort_on_failure
+      )
+      @formatter = Npmdc::Formatter.call(options)
       @dependencies_count = 0
       @missing_dependencies = Set.new
       @suspicious_dependencies = Set.new
@@ -28,19 +30,19 @@ module Npmdc
     ] => :formatter
 
     def call
-      package_json_data = package_json(path)
+      package_data = package_json(path)
       @types.each do |dep|
-        check_dependencies(package_json_data[dep], dep) if package_json_data[dep]
+        check_dependencies(package_data[dep], dep) if package_data[dep]
       end
 
-      if !@missing_dependencies.empty?
+      unless @missing_dependencies.empty?
         raise(MissedDependencyError, dependencies: @missing_dependencies)
       end
 
-      result_stats = "Checked #{@dependencies_count} packages. " +
-                     "Warnings: #{@suspicious_dependencies.count}. " +
-                     "Errors: #{@missing_dependencies.count}. " +
-                     "Everything is ok."
+      result_stats = "Checked #{@dependencies_count} packages. " \
+                     "Warnings: #{@suspicious_dependencies.count}. " \
+                     "Errors: #{@missing_dependencies.count}. " \
+                     'Everything is ok.'
 
       output(result_stats, :success)
 
@@ -107,7 +109,9 @@ module Npmdc
           check_dependency(dep, deps[dep])
         else
           @suspicious_dependencies << "#{dep}@#{deps[dep]}"
-          dep_output("npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn)
+          dep_output(
+            "npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn
+          )
         end
       end
 
@@ -126,14 +130,19 @@ module Npmdc
     end
 
     def check_version(installed_module, dep, version)
-      if !installed_module.key?('version') || !SemanticRange.valid(installed_module['version'])
+      current_version = installed_module['version']
+
+      if !SemanticRange.valid(current_version)
         @missing_dependencies << "#{dep}@#{version}"
         dep_output(dep, :failure)
-      elsif SemanticRange.satisfies(installed_module['version'], version)
+      elsif SemanticRange.satisfies(current_version, version)
         dep_output(dep, :success)
       else
         @missing_dependencies << "#{dep}@#{version}"
-        dep_output("#{dep} expected version '#{version}' but got '#{installed_module['version']}'", :failure)
+        dep_output(
+          "#{dep} expected version '#{version}' but got '#{current_version}'",
+          :failure
+        )
       end
     end
   end

@@ -21,7 +21,7 @@ module Npmdc
       Npmdc.call(options)
     end
 
-    map %w[--version -v] => :__print_version
+    map %w(--version -v) => :__print_version
     desc '--version, -v', 'Print gem version'
     def __print_version
       puts Npmdc::VERSION

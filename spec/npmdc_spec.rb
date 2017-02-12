@@ -99,7 +99,9 @@ describe Npmdc do
 
   context 'incorrect json' do
     let(:path) { './spec/files/case_4' }
-    let(:output_msg) { "Can't parse JSON file ./spec/files/case_4/package.json\n" }
+    let(:output_msg) do
+      "Can't parse JSON file ./spec/files/case_4/package.json\n"
+    end
 
     it { is_expected.to be false }
 

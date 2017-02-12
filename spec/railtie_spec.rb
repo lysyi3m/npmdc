@@ -9,7 +9,7 @@ describe Npmdc::Railtie do
   def within_new_app(root = File.expand_path('../dummy', __FILE__))
     old_app = Rails.application
 
-    old_path =  Npmdc.config.path
+    old_path = Npmdc.config.path
     Npmdc.config.remove_instance_variable :@path
 
     FileUtils.mkdir_p(root)
@@ -28,23 +28,23 @@ describe Npmdc::Railtie do
     Rails.application = old_app
   end
 
-  it "adds npmdc config" do
+  it 'adds npmdc config' do
     within_new_app do |app|
       expect { app.config.npmdc }.not_to raise_error
     end
   end
 
-  it "handles options in config" do
+  it 'handles options in config' do
     within_new_app do |app|
       expect(app.config.npmdc.format).to eq :doc
     end
   end
 
-  describe "initializers" do
-    context "initialize" do
-      let(:name) { "npmdc.initialize"}
+  describe 'initializers' do
+    context 'initialize' do
+      let(:name) { 'npmdc.initialize' }
 
-      it "set project root by default" do
+      it 'set project root by default' do
         within_new_app do |app|
           initializer = app.initializers.find { |i| i.name == name }
           initializer.run(app)
@@ -54,12 +54,12 @@ describe Npmdc::Railtie do
       end
     end
 
-    context "environment_check" do
-      let(:name) { "npmdc.environment_check"}
+    context 'environment_check' do
+      let(:name) { 'npmdc.environment_check' }
 
       before do
         allow(Rails).to receive(:env).and_return(
-          ActiveSupport::StringInquirer.new("test")
+          ActiveSupport::StringInquirer.new('test')
         )
       end
 
@@ -100,8 +100,8 @@ describe Npmdc::Railtie do
       end
     end
 
-    context "call" do
-      let(:name) { 'npmdc.call'}
+    context 'call' do
+      let(:name) { 'npmdc.call' }
 
       context "when Rails::Server is not defined" do
         it "is skipped" do

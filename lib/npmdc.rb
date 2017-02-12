@@ -1,7 +1,7 @@
 module Npmdc
-  require "npmdc/config"
-  require "npmdc/checker"
-  require "npmdc/version"
+  require 'npmdc/config'
+  require 'npmdc/checker'
+  require 'npmdc/version'
 
   class << self
     def call(options = {})
@@ -20,5 +20,5 @@ module Npmdc
     end
   end
 
-  require "npmdc/railtie" if defined?(Rails)
+  require 'npmdc/railtie' if defined?(Rails)
 end

@@ -7,7 +7,7 @@ module Npmdc
     # Make config accessible through application config
     config.npmdc = Npmdc.config
 
-    initializer "npmdc.initialize" do
+    initializer 'npmdc.initialize' do
       Npmdc.config.path = Rails.root unless Npmdc.config.path?
     end
 
