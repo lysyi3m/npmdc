@@ -108,6 +108,7 @@ module Npmdc
               dep_output(data['name'], :success)
             end
           end
+          rescue Errno::EIO # process has finished giving output
           ensure
             Process.wait process
           end
