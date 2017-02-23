@@ -1,0 +1,13 @@
+{
+  "name": "case_2",
+  "main": "index.js",
+  "author": "",
+  "dependencies": {
+    "foo": "1.0.0",
+    "bar": "2.0.0"
+  },
+  "devDependencies": {
+    "node-foo": "~0.2.3"
+  },
+  "license": "ISC"
+}

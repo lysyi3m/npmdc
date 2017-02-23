@@ -6,6 +6,9 @@ module Npmdc
     default_task :check
 
     desc 'check', 'Run check'
+    method_option :package_manager, desc: 'npm or yarn',
+                                    default: 'npm',
+                                    enum: Npmdc::Config::PACKAGE_MANAGERS
     method_option :path, desc: 'Path to package.json config'
     method_option :color, desc: 'Enable color', type: :boolean, default: true
     method_option :types, aliases: [:t],

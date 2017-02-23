@@ -5,6 +5,8 @@ require 'pry-byebug'
 require 'npmdc/core/string_strip_heredoc'
 require 'npmdc'
 
+require 'support/shared_contexts'
+
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # disable output
