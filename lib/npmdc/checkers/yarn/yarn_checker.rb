@@ -81,7 +81,6 @@ module Npmdc
       end
     end
 
-
     def yarn_check
       # yarn doesn't support separate check for dependencies and devDependencies yet
       # so ignore types and check all dependencies for now
@@ -108,6 +107,7 @@ module Npmdc
               dep_output(data['name'], :success)
             end
           end
+          # rubocop:disable Lint/HandleExceptions
           rescue Errno::EIO # process has finished giving output
           ensure
             Process.wait process
