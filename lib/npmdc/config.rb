@@ -9,7 +9,7 @@ module Npmdc
     attr_writer :path
 
     def initialize
-      @package_manager = nil
+      @package_manager = 'npm'
       @path_to_yarn = nil
       @color = true
       @format = :short

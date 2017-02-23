@@ -9,6 +9,8 @@ module Npmdc
     method_option :package_manager, desc: 'npm or yarn',
                                     default: 'npm',
                                     enum: Npmdc::Config::PACKAGE_MANAGERS
+    method_option :path_to_yarn, desc: 'optional path to yarn executable',
+                                 default: nil
     method_option :path, desc: 'Path to package.json config'
     method_option :color, desc: 'Enable color', type: :boolean, default: true
     method_option :types, aliases: [:t],

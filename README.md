@@ -8,7 +8,7 @@ npmdc
 ![Screenshot](https://lysyi3m-pluto.s3.amazonaws.com/dropshare/Снимок-экрана-2016-12-06-в-10.27.02.png)
 
 
-**NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file.
+**NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file or via yarn check.
 
 
 <a href="https://evilmartians.com/?utm_source=npmdc">
@@ -30,6 +30,8 @@ And then execute:
 Or install it yourself as:
 
     $ gem install npmdc
+    
+To use npmdc with yarn you should install yarn.
 
 ## Usage
 
@@ -37,10 +39,12 @@ Or install it yourself as:
 
 ```ruby
 YourApp::Application.configure do
+  config.npmdc.package_manager  = "yarn"                            # `npm` by default
+  config.npmdc.path_to_yarn     = "/path/to/your/yarn"              # nil by default, so the command is just `yarn`
   config.npmdc.path             = "/path/to/your/frontend/code/dir" # `Rails.root` by default
   config.npmdc.format           = "doc"                             # `short`, `doc`, `progress`. `short` by default
   config.npmdc.color            = false                             # `true` by default
-  config.npmdc.types            = ["dependencies"]                  # `["dependencies", "devDependencies"]` by default
+  config.npmdc.types            = ["dependencies"]                  # `["dependencies", "devDependencies"]` by default (ignored with yarn package_manager)
   config.npmdc.environments     = ["development"]                   # `development` only by default
   config.npmdc.abort_on_failure = true                              # 'false' by default
 end
@@ -56,6 +60,8 @@ $ bundle exec npmdc [options]
 _Options:_
 
 ```bash
+      [--package_manager]      # Possible values: npm, yarn; npm by default
+      [--path_to_yarn]         # Path to your yarn installation; nil by default
       [--path=PATH]            # Path to package.json config
       [--color], [--no-color]  # Enable color
                                # Default: true
