@@ -95,21 +95,21 @@ module Npmdc
           puts out
           out.each do |line|
             puts line
-            # line = JSON.parse(line)
-            # type = line['type']
-            # data = line['data']
-            # case type
-            # when 'error'
-            #   dep_output(data, :failure)
-            #   @errors << data
-            # when 'warning'
-            #   dep_output(data, :warn)
-            #   @warnings << data
-            # when 'success'
-            #   dep_output(data, :success)
-            # when 'activityTick'
-            #   dep_output(data['name'], :success)
-            # end
+            line = JSON.parse(line)
+            type = line['type']
+            data = line['data']
+            case type
+            when 'error'
+              dep_output(data, :failure)
+              @errors << data
+            when 'warning'
+              dep_output(data, :warn)
+              @warnings << data
+            when 'success'
+              dep_output(data, :success)
+            when 'activityTick'
+              dep_output(data['name'], :success)
+            end
           end
           rescue Errno::EIO
             puts "Errno:EIO error, but this probably just means " +
