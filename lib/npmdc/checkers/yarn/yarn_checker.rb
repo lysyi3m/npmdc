@@ -90,7 +90,8 @@ module Npmdc
       cmd = "cd #{path} && #{yarn_command} check --json"
       puts cmd
       begin
-        PTY.spawn(cmd) do |out, _, _|
+        PTY.spawn(cmd) do |out, _in, process|
+          begin
           puts out
           out.each do |line|
             puts line
@@ -110,7 +111,15 @@ module Npmdc
             #   dep_output(data['name'], :success)
             # end
           end
+          rescue Errno::EIO
+            puts "Errno:EIO error, but this probably just means " +
+            "that the process has finished giving output"
+          ensure
+            Process.wait process
+          end
         end
+      rescue PTY::ChildExited
+        puts "The child process exited!"
       end
 
       check_finish_output
