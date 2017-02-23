@@ -1,13 +1,16 @@
 module Npmdc
   class Config
+    PACKAGE_MANAGERS = %w(npm yarn).freeze
     DEPEPENDENCY_TYPES = %w(dependencies devDependencies).freeze
     ENVIRONMENTS = %w(development).freeze
 
     attr_accessor :color, :format, :output, :types, :environments,
-                  :abort_on_failure
+                  :abort_on_failure, :package_manager, :path_to_yarn
     attr_writer :path
 
     def initialize
+      @package_manager = nil
+      @path_to_yarn = nil
       @color = true
       @format = :short
       @output = STDOUT

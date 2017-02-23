@@ -19,6 +19,7 @@ describe Npmdc::Railtie do
       Class.new(Rails::Application) do |a|
         a.config.npmdc.format = :doc
         a.config.npmdc.color = false
+        a.config.npmdc.package_manager = 'npm'
       end
 
       yield Rails.application
