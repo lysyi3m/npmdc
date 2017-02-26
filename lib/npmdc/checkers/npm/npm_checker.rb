@@ -1,25 +1,15 @@
+require 'npmdc/checkers/base'
+
 module Npmdc
   module Checkers
-    class NpmChecker
-      extend Forwardable
-      include Npmdc::Errors
-
-      attr_reader :types, :formatter, :path
-
+    class NpmChecker < Base
       def initialize(types:, formatter:, path:)
-        @types = types
-        @formatter = formatter
-        @path = path
+        super(types: types, formatter: formatter, path: path)
 
         @dependencies_count = 0
         @missing_dependencies = Set.new
         @suspicious_dependencies = Set.new
       end
-
-      delegate [
-        :output, :error_output, :dep_output,
-        :check_start_output, :check_finish_output
-      ] => :formatter
 
       def check
         package_json_data = package_json(path)

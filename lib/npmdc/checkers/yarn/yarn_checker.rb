@@ -1,23 +1,15 @@
 require 'pty'
+require 'npmdc/checkers/base'
 require 'npmdc/checkers/yarn/yarn_installation_checker'
 
 module Npmdc
   module Checkers
-    class YarnChecker
-      extend Forwardable
-      include Npmdc::Errors
-
-      attr_reader :types, :formatter, :path, :path_to_yarn
-
-      delegate [
-        :output, :error_output, :dep_output,
-        :check_start_output, :check_finish_output
-      ] => :formatter
+    class YarnChecker < Base
+      attr_reader :path_to_yarn
 
       def initialize(types:, formatter:, path:, path_to_yarn:)
-        @types = types
-        @formatter = formatter
-        @path = path
+        super(types: types, formatter: formatter, path: path)
+
         @path_to_yarn = path_to_yarn
 
         @errors = []
