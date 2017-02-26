@@ -16,7 +16,7 @@ module Npmdc
         @warnings = []
       end
 
-      def check
+      def call
         check_yarn_is_installed
         check_directory_exists(path)
         package_json_path = check_package_json_exists(path)

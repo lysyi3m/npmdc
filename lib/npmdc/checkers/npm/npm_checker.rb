@@ -11,7 +11,7 @@ module Npmdc
         @suspicious_dependencies = Set.new
       end
 
-      def check
+      def call
         package_json_data = package_json(path)
         types.each do |type|
           check_dependencies(package_json_data[type], type) if package_json_data[type]

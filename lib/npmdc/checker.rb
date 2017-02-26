@@ -48,7 +48,7 @@ module Npmdc
             raise UnknownPackageManager, package_manager: @package_manager
           end
 
-        checker.check
+        checker.call
 
         true
       rescue CheckerError => e
