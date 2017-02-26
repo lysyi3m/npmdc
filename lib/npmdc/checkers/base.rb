@@ -1,8 +1,12 @@
+require 'forwardable'
+require 'json'
+require 'npmdc/checkers/errors'
+
 module Npmdc
   module Checkers
     class Base
       extend Forwardable
-      include Npmdc::Errors
+      include Errors
 
       attr_reader :types, :formatter, :path
 

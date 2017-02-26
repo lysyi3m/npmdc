@@ -1,16 +1,12 @@
 require 'colorize'
-require 'json'
-require 'forwardable'
-require 'semantic_range'
 require 'npmdc/formatter'
-require 'npmdc/errors'
+require 'npmdc/checkers/errors'
 require 'npmdc/checkers/npm/npm_checker'
 require 'npmdc/checkers/yarn/yarn_checker'
 
 module Npmdc
   module Checkers
     class Checker
-      extend Forwardable
       include Npmdc::Errors
 
       attr_reader :path, :formatter, :types
@@ -24,21 +20,16 @@ module Npmdc
         @formatter = Npmdc::Formatter.(options)
       end
 
-      delegate [
-        :output, :error_output, :dep_output,
-        :check_start_output, :check_finish_output
-      ] => :formatter
-
       def call
         checker =
           if @package_manager == 'npm'
-            NpmChecker.new(
+            Npm::NpmChecker.new(
               types: @types,
               formatter: @formatter,
               path: path,
             )
           elsif @package_manager == 'yarn'
-            YarnChecker.new(
+            Yarn::YarnChecker.new(
               types: @types,
               formatter: @formatter,
               path: path,
@@ -51,8 +42,8 @@ module Npmdc
         checker.call
 
         true
-      rescue CheckerError => e
-        error_output(e)
+      rescue Errors::CheckerError => e
+        formatter.error_output(e)
 
         exit(1) if @abort_on_failure && e.class.critical?
 

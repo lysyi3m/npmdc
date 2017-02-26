@@ -36,7 +36,7 @@ describe Npmdc do
       it 'catches NoNodeModulesError' do
         expect_any_instance_of(Npmdc::Formatters::Documentation).to(
           receive(:error_output)
-          .with(instance_of(Npmdc::Errors::NoNodeModulesError))
+          .with(instance_of(Npmdc::Checkers::Errors::NoNodeModulesError))
         )
 
         is_expected.to be false
@@ -115,7 +115,7 @@ describe Npmdc do
       it 'catches MissedPackageError' do
         expect_any_instance_of(Npmdc::Formatters::Documentation).to(
           receive(:error_output)
-          .with(instance_of(Npmdc::Errors::MissedDependencyError))
+          .with(instance_of(Npmdc::Checkers::Errors::MissedDependencyError))
         )
 
         is_expected.to be false
@@ -130,7 +130,7 @@ describe Npmdc do
       it 'catches MissedPackageError' do
         expect_any_instance_of(Npmdc::Formatters::Documentation).to(
           receive(:error_output)
-          .with(instance_of(Npmdc::Errors::MissedDependencyError))
+          .with(instance_of(Npmdc::Checkers::Errors::MissedDependencyError))
         )
 
         is_expected.to be false
@@ -181,9 +181,9 @@ describe Npmdc do
       include_context 'case_2_success_3_packages_0_warnings'
 
       it 'outputs correct message' do
-        expect_any_instance_of(Npmdc::Checkers::YarnChecker).to(
+        expect_any_instance_of(Npmdc::Checkers::Yarn::YarnChecker).to(
           receive(:check_yarn_is_installed)
-          .and_raise(Npmdc::Errors::YarnNotInstalledError, yarn_command: 'yarn')
+          .and_raise(Npmdc::Checkers::Yarn::Errors::YarnNotInstalledError, yarn_command: 'yarn')
         )
 
         output_msg = <<-output.strip_heredoc
@@ -216,7 +216,7 @@ describe Npmdc do
       it 'catches NoYarnLockError' do
         expect_any_instance_of(Npmdc::Formatters::Documentation).to(
           receive(:error_output)
-          .with(instance_of(Npmdc::Errors::NoYarnLockFileError))
+          .with(instance_of(Npmdc::Checkers::Yarn::Errors::NoYarnLockFileError))
         )
 
         is_expected.to be false
