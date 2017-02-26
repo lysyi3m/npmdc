@@ -1,11 +1,11 @@
 module Npmdc
   require "npmdc/config"
-  require "npmdc/checker"
+  require "npmdc/checkers/checker"
   require "npmdc/version"
 
   class << self
     def call(options = {})
-      Npmdc::Checker.new(options).call
+      Npmdc::Checkers::Checker.new(options).call
 
     rescue Npmdc::Errors::ConfigurationError => e
       abort(e.banner)

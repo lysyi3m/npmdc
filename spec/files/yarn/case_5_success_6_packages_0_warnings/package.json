@@ -1,0 +1,11 @@
+{
+  "name": "case_5",
+  "dependencies": {
+    "foo": "1.0.0",
+    "bar": ">= 1.0.0",
+    "optimist": "1.0.0",
+    "watch": "1.0.0",
+    "wordwrap": "1.0.0"
+  },
+  "license": "ISC"
+}

@@ -3,17 +3,15 @@ require 'spec_helper'
 describe Npmdc do
   using StringStripHeredoc
 
-  let(:path) { nil }
   let(:format) { 'doc' }
-  let(:options) { { 'color' => false, 'path' => path, 'format' => format } }
-
+  let(:options) { { 'color' => false, 'format' => format, 'path' => path } }
   subject { described_class.call(options) }
 
   shared_examples 'critical error' do
     before { options['abort_on_failure'] = true }
 
     it 'aborts current process' do
-      expect_any_instance_of(described_class::Checker).to receive(:exit).with(1)
+      expect_any_instance_of(described_class::Checkers::Checker).to receive(:exit).with(1)
 
       subject
     end
@@ -23,176 +21,220 @@ describe Npmdc do
     before { options['abort_on_failure'] = true }
 
     it 'does not abort current process' do
-      expect_any_instance_of(described_class::Checker).not_to receive(:exit)
+      expect_any_instance_of(described_class::Checkers::Checker).not_to receive(:exit)
 
       subject
     end
   end
 
-  context 'no /node_modules folder' do
-    let(:path) { './spec/files/case_1/' }
+  shared_examples 'a checker' do |package_manager|
+    include_context package_manager
 
-    it { is_expected.to be false }
+    describe 'no /node_modules folder' do
+      include_context 'case_1_no_node_modules'
 
-    it 'displays correct message' do
-      output_msg = <<-output.strip_heredoc
-        Can't find `node_modules` folder inside './spec/files/case_1/' directory!
+      it 'catches NoNodeModulesError' do
+        expect_any_instance_of(Npmdc::Formatters::Documentation).to(
+          receive(:error_output)
+          .with(instance_of(Npmdc::Checkers::Errors::NoNodeModulesError))
+        )
 
-        Run `npm install` to install missing packages.
-      output
+        is_expected.to be false
+      end
 
-      expect { subject }.to write_output(output_msg)
+      it_behaves_like 'critical error'
     end
 
-    it 'displays correct colors' do
-      options['color'] = true
-      output_msg = <<-output.strip_heredoc
-        Can't find `node_modules` folder inside './spec/files/case_1/' directory!
-        \e[0;33;49m
-        Run `npm install` to install missing packages.\e[0m
-      output
+    describe 'no package.json file' do
+      let(:path) { './spec/' }
 
-      expect { subject }.to write_output(output_msg)
+      it { is_expected.to be false }
+
+      it 'displays correct message' do
+        output_msg = <<-output.strip_heredoc
+          There is no `package.json` file inside './spec/' directory.
+        output
+
+        expect { subject }.to write_output(output_msg)
+      end
+
+      it 'displays correct colors' do
+        options['color'] = true
+
+        output_msg = <<-output.strip_heredoc
+          There is no `package.json` file inside './spec/' directory.
+        output
+
+        expect { subject }.to write_output(output_msg)
+      end
+
+      it_behaves_like 'non critical error'
     end
 
-    it_behaves_like 'critical error'
+    describe 'unexisted path' do
+      let(:path) { './unexisted/' }
+      let(:output_msg) { "There is no './unexisted/' directory.\n" }
+
+      it { is_expected.to be false }
+
+      it 'displays correct message' do
+        expect { subject }.to write_output(output_msg)
+      end
+
+      it_behaves_like 'critical error'
+    end
+
+    describe 'incorrect json' do
+      include_context 'case_4_broken_package_json'
+      let(:output_msg) { "Can't parse JSON file #{path}/package.json\n" }
+
+      it { is_expected.to be false }
+
+      it 'displays correct message' do
+        expect { subject }.to write_output(output_msg)
+      end
+
+      it_behaves_like 'critical error'
+    end
+
+    describe 'unknown formatter' do
+      include_context 'case_2_success_3_packages_0_warnings'
+      let(:format) { 'whatever' }
+      let(:output_msg) { "Unknown 'whatever' formatter" }
+
+      it 'displays correct message' do
+        expect(described_class).to receive(:abort).with(output_msg)
+
+        subject
+      end
+    end
+
+    describe 'failures check' do
+      include_context 'case_3_3_missing_packages'
+
+      it 'catches MissedPackageError' do
+        expect_any_instance_of(Npmdc::Formatters::Documentation).to(
+          receive(:error_output)
+          .with(instance_of(Npmdc::Checkers::Errors::MissedDependencyError))
+        )
+
+        is_expected.to be false
+      end
+
+      it_behaves_like 'critical error'
+    end
+
+    describe 'failure version check' do
+      include_context 'case_6_5_missing_packages'
+
+      it 'catches MissedPackageError' do
+        expect_any_instance_of(Npmdc::Formatters::Documentation).to(
+          receive(:error_output)
+          .with(instance_of(Npmdc::Checkers::Errors::MissedDependencyError))
+        )
+
+        is_expected.to be false
+      end
+
+      it_behaves_like 'critical error'
+    end
+
+    describe 'success check' do
+      include_context 'case_2_success_3_packages_0_warnings'
+
+      it { is_expected.to be true }
+
+      it 'returns correct message' do
+        output_msg = <<-output.strip_heredoc
+          Checked 3 packages. Warnings: 0. Errors: 0. Everything is ok.
+        output
+
+        expect { subject }.to write_output(output_msg)
+      end
+    end
+
+    describe 'success version check with warnings' do
+      include_context 'case_7_sucess_4_packages_3_warnings'
+
+      it { is_expected.to be true }
+
+      it 'return correct message' do
+        output_msg = <<-output.strip_heredoc
+          Checked 4 packages. Warnings: 3. Errors: 0. Everything is ok.
+        output
+
+        expect { subject }.to write_output(output_msg)
+      end
+    end
   end
 
-  context 'no package.json file' do
-    let(:path) { './spec/' }
-
-    it { is_expected.to be false }
-
-    it 'displays correct message' do
-      output_msg = <<-output.strip_heredoc
-        There is no `package.json` file inside './spec/' directory.
-      output
-
-      expect { subject }.to write_output(output_msg)
-    end
-
-    it 'displays correct colors' do
-      options['color'] = true
-
-      output_msg = <<-output.strip_heredoc
-        There is no `package.json` file inside './spec/' directory.
-      output
-
-      expect { subject }.to write_output(output_msg)
-    end
-
-    it_behaves_like 'non critical error'
+  describe 'npm_checker' do
+    it_should_behave_like 'a checker', 'npm'
   end
 
-  context 'unexisted path' do
-    let(:path) { './unexisted/' }
-    let(:output_msg) { "There is no './unexisted/' directory.\n" }
+  describe 'yarn_checker' do
+    include_context 'yarn'
 
-    it { is_expected.to be false }
+    it_should_behave_like 'a checker', 'yarn'
 
-    it 'displays correct message' do
-      expect { subject }.to write_output(output_msg)
+    context 'yarn is not installed globally' do
+      include_context 'case_2_success_3_packages_0_warnings'
+
+      it 'outputs correct message' do
+        expect_any_instance_of(Npmdc::Checkers::Yarn::Checker).to(
+          receive(:check_yarn_is_installed)
+          .and_raise(Npmdc::Checkers::Yarn::Errors::YarnNotInstalledError, yarn_command: 'yarn')
+        )
+
+        output_msg = <<-output.strip_heredoc
+          Failed to find `yarn`. Check that `yarn` is installed, please.
+        output
+
+        expect { subject }.to write_output(output_msg)
+      end
     end
 
-    it_behaves_like 'critical error'
-  end
+    context 'yarn is not installed on specified path' do
+      include_context 'case_2_success_3_packages_0_warnings'
 
-  context 'incorrect json' do
-    let(:path) { './spec/files/case_4' }
-    let(:output_msg) { "Can't parse JSON file ./spec/files/case_4/package.json\n" }
+      before { options['path_to_yarn'] = '/no_yarn_here/' }
 
-    it { is_expected.to be false }
+      it 'outputs correct message' do
+        output_msg = <<-output.strip_heredoc
+          Failed to find `/no_yarn_here/yarn`. Check that `yarn` is installed, please.
+        output
 
-    it 'displays correct message' do
-      expect { subject }.to write_output(output_msg)
+        expect { subject }.to write_output(output_msg)
+      end
+
+      it_behaves_like 'critical error'
     end
 
-    it_behaves_like 'critical error'
+    context 'no yarn.lock file' do
+      include_context 'case_8_no_yarn_lock'
+
+      it 'catches NoYarnLockError' do
+        expect_any_instance_of(Npmdc::Formatters::Documentation).to(
+          receive(:error_output)
+          .with(instance_of(Npmdc::Checkers::Yarn::Errors::NoYarnLockFileError))
+        )
+
+        is_expected.to be false
+      end
+
+      it_behaves_like 'critical error'
+    end
   end
 
-  context 'unknown formatter' do
-    let(:path) { './spec/files/case_2/' }
-    let(:format) { 'whatever' }
-    let(:output_msg) { "Unknown 'whatever' formatter" }
+  describe 'unknown package manager' do
+    let(:path) { nil }
+    before { options['package_manager'] = 'killer-or-yarn' }
+    let(:output_msg) { "Unknown 'killer-or-yarn' package manager" }
 
     it 'displays correct message' do
       expect(described_class).to receive(:abort).with(output_msg)
 
       subject
-    end
-  end
-
-  context 'success check' do
-    let(:path) { './spec/files/case_2/' }
-
-    it { is_expected.to be true }
-
-    it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
-        Checked 3 packages. Warnings: 0. Errors: 0. Everything is ok.
-      output
-
-      expect { subject }.to write_output(output_msg)
-    end
-  end
-
-  context 'failures check' do
-    let(:path) { './spec/files/case_3/' }
-
-    it { is_expected.to be false }
-
-    it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
-        Run `npm install` to install 3 missing packages.
-      output
-
-      expect { subject }.to write_output(output_msg)
-    end
-
-    it_behaves_like 'critical error'
-  end
-
-  context 'success version check' do
-    let(:path) { './spec/files/case_5' }
-
-    it { is_expected.to be true }
-
-    it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
-        Checked 6 packages. Warnings: 0. Errors: 0. Everything is ok.
-      output
-
-      expect { subject }.to write_output(output_msg)
-    end
-  end
-
-  context 'failure version check' do
-    let(:path) { './spec/files/case_6' }
-
-    it { is_expected.to be false }
-
-    it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
-        Run `npm install` to install 5 missing packages.
-      output
-
-      expect { subject }.to write_output(output_msg)
-    end
-
-    it_behaves_like 'critical error'
-  end
-
-  context 'success version check with warnings' do
-    let(:path) { './spec/files/case_7' }
-
-    it { is_expected.to be true }
-
-    it 'return correct message' do
-      output_msg = <<-output.strip_heredoc
-        Checked 4 packages. Warnings: 3. Errors: 0. Everything is ok.
-      output
-
-      expect { subject }.to write_output(output_msg)
     end
   end
 end
