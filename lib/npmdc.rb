@@ -1,6 +1,6 @@
 module Npmdc
   require "npmdc/config"
-  require "npmdc/checker"
+  require "npmdc/checkers/checker"
   require "npmdc/version"
 
   class << self
