@@ -1,8 +1,8 @@
 require 'colorize'
 require 'npmdc/formatter'
 require 'npmdc/checkers/errors'
-require 'npmdc/checkers/npm/npm_checker'
-require 'npmdc/checkers/yarn/yarn_checker'
+require 'npmdc/checkers/npm/checker'
+require 'npmdc/checkers/yarn/checker'
 
 module Npmdc
   module Checkers
@@ -23,13 +23,13 @@ module Npmdc
       def call
         checker =
           if @package_manager == 'npm'
-            Npm::NpmChecker.new(
+            Npm::Checker.new(
               types: @types,
               formatter: @formatter,
               path: path,
             )
           elsif @package_manager == 'yarn'
-            Yarn::YarnChecker.new(
+            Yarn::Checker.new(
               types: @types,
               formatter: @formatter,
               path: path,

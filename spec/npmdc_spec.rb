@@ -181,7 +181,7 @@ describe Npmdc do
       include_context 'case_2_success_3_packages_0_warnings'
 
       it 'outputs correct message' do
-        expect_any_instance_of(Npmdc::Checkers::Yarn::YarnChecker).to(
+        expect_any_instance_of(Npmdc::Checkers::Yarn::Checker).to(
           receive(:check_yarn_is_installed)
           .and_raise(Npmdc::Checkers::Yarn::Errors::YarnNotInstalledError, yarn_command: 'yarn')
         )

@@ -6,7 +6,7 @@ require 'npmdc/checkers/yarn/errors'
 module Npmdc
   module Checkers
     module Yarn
-      class YarnChecker < Base
+      class Checker < Base
         include Errors
         attr_reader :path_to_yarn
 

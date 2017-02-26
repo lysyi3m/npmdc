@@ -4,7 +4,7 @@ require 'npmdc/checkers/base'
 module Npmdc
   module Checkers
     module Npm
-      class NpmChecker < Base
+      class Checker < Base
         def initialize(types:, formatter:, path:)
           super(types: types, formatter: formatter, path: path)
 
