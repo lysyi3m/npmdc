@@ -1,5 +1,3 @@
-require 'npmdc/checkers/errors'
-
 module Npmdc
   module Checkers
     module Yarn

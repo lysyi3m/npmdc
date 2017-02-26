@@ -1,6 +1,4 @@
-require 'colorize'
 require 'npmdc/formatter'
-require 'npmdc/checkers/errors'
 require 'npmdc/checkers/npm/checker'
 require 'npmdc/checkers/yarn/checker'
 

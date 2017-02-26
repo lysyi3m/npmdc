@@ -1,10 +1,11 @@
-require 'npmdc/checkers/yarn/errors'
+require_relative 'errors'
 
 module Npmdc
   module Checkers
     module Yarn
       class YarnInstallationChecker
         include Errors
+
         attr_reader :yarn_command
 
         def initialize(yarn_command)

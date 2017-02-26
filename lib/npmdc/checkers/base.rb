@@ -23,6 +23,10 @@ module Npmdc
         @formatter = formatter
         @path = path
       end
+
+      def self.command_to_resolve_missing_packages(count = nil)
+        raise(NotImplementedError, '#command_to_resolve_missing_packages has to be implemented in subclass')
+      end
     end
   end
 end

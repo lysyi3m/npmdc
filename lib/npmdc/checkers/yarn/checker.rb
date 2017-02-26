@@ -1,7 +1,7 @@
 require 'pty'
 require 'npmdc/checkers/base'
-require 'npmdc/checkers/yarn/yarn_installation_checker'
-require 'npmdc/checkers/yarn/errors'
+require_relative 'yarn_installation_checker'
+require_relative 'errors'
 
 module Npmdc
   module Checkers
