@@ -20,7 +20,7 @@ module Npmdc
           end
 
           if !@missing_dependencies.empty?
-            raise(MissedDependencyError, dependencies: @missing_dependencies, manager: 'npm')
+            raise(MissedDependencyError, dependencies: @missing_dependencies, manager: self.class)
           end
 
           result_stats = "Checked #{@dependencies_count} packages. " +
@@ -29,6 +29,14 @@ module Npmdc
                          "Everything is ok."
 
           output(result_stats, :success)
+        end
+
+        def self.command_to_resolve_missing_packages(count = nil)
+          if count.nil?
+            "Run `npm install` to install missing packages."
+          else
+            "Run `npm install` to install #{count} missing packages."
+          end
         end
 
         private
@@ -49,7 +57,7 @@ module Npmdc
         def installed_modules
           @installed_modules ||= begin
             modules_directory = File.join(path, 'node_modules')
-            raise(NoNodeModulesError, path: path, manager: 'npm') unless Dir.exist?(modules_directory)
+            raise(NoNodeModulesError, path: path, manager: self.class) unless Dir.exist?(modules_directory)
 
             Dir.glob("#{modules_directory}/*").each_with_object({}) do |file_path, modules|
               next unless File.directory?(file_path)

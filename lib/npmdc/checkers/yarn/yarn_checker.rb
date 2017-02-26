@@ -34,6 +34,10 @@ module Npmdc
           output_success(count_packages(package_json_data))
         end
 
+        def self.command_to_resolve_missing_packages(count = nil)
+          'Run `yarn` to install missing packages.'
+        end
+
         private
 
         def check_yarn_is_installed
@@ -73,7 +77,7 @@ module Npmdc
           if Dir.exist?(modules_directory)
             modules_directory
           else
-            raise(NoNodeModulesError, path: path, manager: 'yarn')
+            raise(NoNodeModulesError, path: path, manager: self.class)
           end
         end
 
@@ -121,7 +125,7 @@ module Npmdc
         end
 
         def handle_missed_dependency_error
-          raise(MissedDependencyError, dependencies: @errors, manager: 'yarn') unless @errors.empty?
+          raise(MissedDependencyError, dependencies: @errors, manager: self.class) unless @errors.empty?
         end
 
         def output_success(packages_count)

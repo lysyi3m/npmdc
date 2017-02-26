@@ -17,28 +17,11 @@ module Npmdc
             @critical = true
           end
         end
-      end
-
-      class NoNodeModulesError < CheckerError
-        define_critical!
-
-        def banner
-          path = options.fetch(:path)
-          [
-            "Can't find `node_modules` folder inside '#{path}' directory!",
-            [command_to_resolve_errors, :warn]
-          ]
-        end
 
         private
 
-        def command_to_resolve_errors
-          case options.fetch(:manager)
-          when 'npm'
-            "\nRun `npm install` to install missing packages."
-          when 'yarn'
-            "\nRun `yarn` to install missing packages."
-          end
+        def manager
+          options.fetch(:manager)
         end
       end
 
@@ -67,6 +50,19 @@ module Npmdc
         end
       end
 
+      class NoNodeModulesError < CheckerError
+        define_critical!
+
+        def banner
+          path = options.fetch(:path)
+          [
+            "Can't find `node_modules` folder inside '#{path}' directory!",
+            ["\n" + manager.command_to_resolve_missing_packages, :warn]
+          ]
+        end
+      end
+
+
       class MissedDependencyError < CheckerError
         define_critical!
 
@@ -77,7 +73,7 @@ module Npmdc
             " missing or not installed properly:"
           ] + msgs(deps) <<
           [
-            command_to_resolve_errors(deps), :warn
+            "\n" + manager.command_to_resolve_missing_packages(deps.count), :warn
           ]
         end
 
@@ -85,15 +81,6 @@ module Npmdc
 
         def msgs(dependencies)
           dependencies.map { |d| "  * #{d}"}
-        end
-
-        def command_to_resolve_errors(deps)
-          case options.fetch(:manager)
-          when 'npm'
-            "\nRun `npm install` to install #{deps.size} missing packages."
-          when 'yarn'
-            "\nRun `yarn` to install missing packages."
-          end
         end
       end
     end
