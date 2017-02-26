@@ -5,7 +5,7 @@ module Npmdc
 
   class << self
     def call(options = {})
-      Npmdc::Checker.new(options).call
+      Npmdc::Checkers::Checker.new(options).call
 
     rescue Npmdc::Errors::ConfigurationError => e
       abort(e.banner)

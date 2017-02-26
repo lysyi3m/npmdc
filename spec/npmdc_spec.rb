@@ -11,7 +11,7 @@ describe Npmdc do
     before { options['abort_on_failure'] = true }
 
     it 'aborts current process' do
-      expect_any_instance_of(described_class::Checker).to receive(:exit).with(1)
+      expect_any_instance_of(described_class::Checkers::Checker).to receive(:exit).with(1)
 
       subject
     end
@@ -21,7 +21,7 @@ describe Npmdc do
     before { options['abort_on_failure'] = true }
 
     it 'does not abort current process' do
-      expect_any_instance_of(described_class::Checker).not_to receive(:exit)
+      expect_any_instance_of(described_class::Checkers::Checker).not_to receive(:exit)
 
       subject
     end
@@ -181,7 +181,7 @@ describe Npmdc do
       include_context 'case_2_success_3_packages_0_warnings'
 
       it 'outputs correct message' do
-        expect_any_instance_of(Npmdc::YarnChecker).to(
+        expect_any_instance_of(Npmdc::Checkers::YarnChecker).to(
           receive(:check_yarn_is_installed)
           .and_raise(Npmdc::Errors::YarnNotInstalledError, yarn_command: 'yarn')
         )
