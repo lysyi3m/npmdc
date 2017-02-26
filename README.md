@@ -8,7 +8,7 @@ npmdc
 ![Screenshot](https://lysyi3m-pluto.s3.amazonaws.com/dropshare/Снимок-экрана-2016-12-06-в-10.27.02.png)
 
 
-**NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file or via yarn check.
+**NPM Dependency Checker** is a simple tool which can check for missed dependencies based on your `package.json` file or via `yarn check` yarn's CLI command.
 
 
 <a href="https://evilmartians.com/?utm_source=npmdc">
