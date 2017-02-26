@@ -30,7 +30,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install npmdc
-    
+
 To use npmdc with yarn you should install yarn.
 
 ## Usage
@@ -60,8 +60,8 @@ $ bundle exec npmdc [options]
 _Options:_
 
 ```bash
-      [--package_manager]      # Possible values: npm, yarn; npm by default
-      [--path_to_yarn]         # Path to your yarn installation; nil by default
+      [--package-manager]      # Possible values: npm, yarn; npm by default
+      [--path-to-yarn]         # Path to your yarn installation; nil by default
       [--path=PATH]            # Path to package.json config
       [--color], [--no-color]  # Enable color
                                # Default: true
