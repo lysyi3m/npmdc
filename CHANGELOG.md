@@ -103,3 +103,8 @@ Thanks to @sponomarev !
 Thanks to @sponomarev !
 
 * Added `abort_on_failure` option
+
+
+### 0.4.1
+
+* Fixed unexpected behavior when `node_modules` contains extra folders w/o `package.json` file inside.
