@@ -61,7 +61,10 @@ module Npmdc
         raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
 
         Dir.glob("#{modules_directory}/*").each_with_object({}) do |file_path, modules|
-          next unless File.directory?(file_path)
+          module_package_json_file = File.join(file_path, 'package.json')
+
+          next if !File.directory?(file_path) || !File.file?(module_package_json_file)
+
           modules[File.basename(file_path)] = package_json(file_path)
         end
       end
