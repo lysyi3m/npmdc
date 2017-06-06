@@ -60,12 +60,26 @@ module Npmdc
         modules_directory = File.join(path, 'node_modules')
         raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
 
-        Dir.glob("#{modules_directory}/*").each_with_object({}) do |file_path, modules|
-          module_package_json_file = File.join(file_path, 'package.json')
+        Dir.glob("#{modules_directory}/*").each_with_object({}) do |module_file_path, modules|
+          next unless File.directory?(module_file_path)
 
-          next if !File.directory?(file_path) || !File.file?(module_package_json_file)
+          module_folder = File.basename(module_file_path)
 
-          modules[File.basename(file_path)] = package_json(file_path)
+          if module_folder.start_with?('@')
+            Dir.glob("#{module_file_path}/*") do |file_path|
+              module_package_json_file = File.join(file_path, 'package.json')
+
+              next if !File.directory?(file_path) || !File.file?(module_package_json_file)
+
+              modules["#{module_folder}/#{File.basename(file_path)}"] = package_json(file_path)
+            end
+          else
+            module_package_json_file = File.join(module_file_path, 'package.json')
+
+            next unless File.file?(module_package_json_file)
+
+            modules[module_folder] = package_json(module_file_path)
+          end
         end
       end
     end

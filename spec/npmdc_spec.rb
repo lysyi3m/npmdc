@@ -195,4 +195,18 @@ describe Npmdc do
       expect { subject }.to write_output(output_msg)
     end
   end
+
+  context 'success scoped packages check' do
+    let(:path) { './spec/files/case_8' }
+
+    it { is_expected.to be true }
+
+    it 'returns correct message' do
+      output_msg = <<-output.strip_heredoc
+        Checked 4 packages. Warnings: 0. Errors: 0. Everything is ok.
+      output
+
+      expect { subject }.to write_output(output_msg)
+    end
+  end
 end
