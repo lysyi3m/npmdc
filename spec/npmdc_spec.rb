@@ -209,4 +209,20 @@ describe Npmdc do
       expect { subject }.to write_output(output_msg)
     end
   end
+
+  context 'failure scoped packages check' do
+    let(:path) { './spec/files/case_9' }
+
+    it { is_expected.to be false }
+
+    it 'returns correct message' do
+      output_msg = <<-output.strip_heredoc
+        Run `npm install` to install 2 missing packages.
+      output
+
+      expect { subject }.to write_output(output_msg)
+    end
+
+    it_behaves_like 'critical error'
+  end
 end
