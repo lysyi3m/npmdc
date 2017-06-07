@@ -20,5 +20,5 @@ module Npmdc
     end
   end
 
-  require "npmdc/railtie" if defined?(Rails)
+  require "npmdc/railtie" if defined?(Rails::Server)
 end
