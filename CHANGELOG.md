@@ -108,3 +108,10 @@ Thanks to @sponomarev !
 ### 0.4.1
 
 * Fixed unexpected behavior when `node_modules` contains extra folders w/o `package.json` file inside.
+
+
+### 0.5.0
+
+* Added support for checking [scoped](https://docs.npmjs.com/misc/scope) npm modules (Thanks to @psdcoder !)
+
+* npmdc now starts only with `rails server` when using Rails (Thanks to @iskvmk !)
