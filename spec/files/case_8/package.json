@@ -1,0 +1,10 @@
+{
+  "name": "case_8",
+  "dependencies": {
+    "@bar/bar": "0.1.1",
+    "@bar/foo": "0.9.9",
+    "@foo/foo": "1.0.0",
+    "@foo/bar": "1.0.0"
+  },
+  "license": "ISC"
+}
