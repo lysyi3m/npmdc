@@ -63,25 +63,39 @@ describe Npmdc::Railtie do
         )
       end
 
-      it "aborts initialization" do
-        within_new_app do |app|
-          initializer = app.initializers.find { |i| i.name == name }
-
-          expect_any_instance_of(described_class).to receive(:abort)
-
-          initializer.run(app)
+      context "when Rails::Server is not defined" do
+        it "is skipped" do
+          within_new_app do |app|
+            initializer = app.initializers.find { |i| i.name == name }
+            expect(Rails).not_to receive(:env)
+            initializer.run(app)
+          end
         end
       end
 
-      it "allows initialization" do
-        within_new_app do |app|
-          initializer = app.initializers.find { |i| i.name == name }
+      context "when Rails::Server is defined" do
+        before { stub_const("Rails::Server", double) }
 
-          expect_any_instance_of(described_class).not_to receive(:abort)
+        it "aborts initialization" do
+          within_new_app do |app|
+            initializer = app.initializers.find { |i| i.name == name }
 
-          allow(app.config.npmdc).to receive(:environments).and_return(%w(test))
+            expect_any_instance_of(described_class).to receive(:abort)
 
-          initializer.run(app)
+            initializer.run(app)
+          end
+        end
+
+        it "allows initialization" do
+          within_new_app do |app|
+            initializer = app.initializers.find { |i| i.name == name }
+
+            expect_any_instance_of(described_class).not_to receive(:abort)
+
+            allow(app.config.npmdc).to receive(:environments).and_return(%w(test))
+
+            initializer.run(app)
+          end
         end
       end
     end
@@ -89,17 +103,31 @@ describe Npmdc::Railtie do
     context "call" do
       let(:name) { 'npmdc.call'}
 
-      it "shows input" do
-        within_new_app do |app|
-          initializer = app.initializers.find { |i| i.name == name }
+      context "when Rails::Server is not defined" do
+        it "is skipped" do
+          within_new_app do |app|
+            initializer = app.initializers.find { |i| i.name == name }
+            expect(Npmdc).not_to receive(:call)
+            initializer.run(app)
+          end
+        end
+      end
 
-          output_msg = <<-output.strip_heredoc
-            Checking dependencies:
-              ✗ foo
-              ✗ bar
-          output
+      context "when Rails::Server is defined" do
+        before { stub_const("Rails::Server", double) }
 
-          expect { initializer.run(app) }.to write_output(output_msg)
+        it "shows output" do
+          within_new_app do |app|
+            initializer = app.initializers.find { |i| i.name == name }
+
+            output_msg = <<-output.strip_heredoc
+              Checking dependencies:
+                ✗ foo
+                ✗ bar
+            output
+
+            expect { initializer.run(app) }.to write_output(output_msg)
+          end
         end
       end
     end

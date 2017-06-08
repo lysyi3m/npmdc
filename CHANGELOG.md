@@ -115,3 +115,7 @@ Thanks to @sponomarev !
 * Added support for checking [scoped](https://docs.npmjs.com/misc/scope) npm modules (Thanks to @psdcoder !)
 
 * npmdc now starts only with `rails server` when using Rails (Thanks to @iskvmk !)
+
+### 0.5.1
+
+* Fix bug with server detection (always include Railtie in Rails)

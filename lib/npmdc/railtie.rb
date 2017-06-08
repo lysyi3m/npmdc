@@ -12,6 +12,7 @@ module Npmdc
     end
 
     initializer "npmdc.environment_check" do
+      next unless defined?(Rails::Server)
       unless config.npmdc.environments.include?(Rails.env)
         abort <<-END.strip_heredoc
           Npmdc is trying to be activated in the #{Rails.env} environment.
@@ -27,7 +28,7 @@ module Npmdc
     end
 
     initializer "npmdc.call" do
-      Npmdc.call
+      Npmdc.call if defined?(Rails::Server)
     end
   end
 end
