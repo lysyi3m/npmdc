@@ -62,17 +62,25 @@ module Npmdc
       output(result_stats, :success)
     end
 
-    def modules_directory
-      @modules_directory ||= File.join(path, 'node_modules')
-      raise(NoNodeModulesError, path: path) unless Dir.exist?(@modules_directory)
-      @modules_directory
+    class ModulesDirectory
+      include Npmdc::Errors
+
+      def initialize#(path)
+        # @path = path
+      end
+
+      def self.all(path)
+        modules_directory ||= File.join(path, 'node_modules')
+        raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
+
+        Dir.glob("#{modules_directory}/*").select { |file_path| File.directory?(file_path) }
+      end
     end
 
     def installed_modules
       @installed_modules ||= begin
-        Dir.glob("#{modules_directory}/*").each_with_object({}) do |module_file_path, modules|
-          next unless File.directory?(module_file_path)
-
+        modules = {}
+        ModulesDirectory.all(path).each do |module_file_path|
           module_folder = File.basename(module_file_path)
 
           if module_folder.start_with?('@')
@@ -91,6 +99,7 @@ module Npmdc
             modules[module_folder] = package_json(module_file_path)
           end
         end
+        modules
       end
     end
 
