@@ -39,12 +39,7 @@ module Npmdc
         raise(MissedDependencyError, dependencies: @missing_dependencies)
       end
 
-      result_stats = "Checked #{@dependencies_count} packages. " \
-                     "Warnings: #{@suspicious_dependencies.count}. " \
-                     "Errors: #{@missing_dependencies.count}. " \
-                     'Everything is ok.'
-
-      output(result_stats, :success)
+      output_stats
 
       true
     rescue CheckerError => e
@@ -56,6 +51,16 @@ module Npmdc
     end
 
     private
+
+    # TODO: move to formatter class
+    def output_stats
+      result_stats = "Checked #{@dependencies_count} packages. " \
+                     "Warnings: #{@suspicious_dependencies.count}. " \
+                     "Errors: #{@missing_dependencies.count}. " \
+                     'Everything is ok.'
+
+      output(result_stats, :success)
+    end
 
     def installed_modules
       @installed_modules ||= begin
