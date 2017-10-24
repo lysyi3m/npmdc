@@ -1,5 +1,7 @@
 AllCops:
   TargetRubyVersion: 2.4
+  Exclude:
+    - gemfiles/**/*
 
 Style/FrozenStringLiteralComment:
   Enabled: false
