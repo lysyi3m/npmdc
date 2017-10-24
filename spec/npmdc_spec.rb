@@ -35,22 +35,22 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'displays correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Can't find `node_modules` folder inside './spec/files/case_1/' directory!
 
         Run `npm install` to install missing packages.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
 
     it 'displays correct colors' do
       options['color'] = true
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Can't find `node_modules` folder inside './spec/files/case_1/' directory!
         \e[0;33;49m
         Run `npm install` to install missing packages.\e[0m
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -64,9 +64,9 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'displays correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         There is no `package.json` file inside './spec/' directory.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -74,9 +74,9 @@ describe Npmdc do
     it 'displays correct colors' do
       options['color'] = true
 
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         There is no `package.json` file inside './spec/' directory.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -99,7 +99,9 @@ describe Npmdc do
 
   context 'incorrect json' do
     let(:path) { './spec/files/case_4' }
-    let(:output_msg) { "Can't parse JSON file ./spec/files/case_4/package.json\n" }
+    let(:output_msg) do
+      "Can't parse JSON file ./spec/files/case_4/package.json\n"
+    end
 
     it { is_expected.to be false }
 
@@ -128,9 +130,9 @@ describe Npmdc do
     it { is_expected.to be true }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Checked 3 packages. Warnings: 0. Errors: 0. Everything is ok.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -142,9 +144,9 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Run `npm install` to install 3 missing packages.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -158,9 +160,9 @@ describe Npmdc do
     it { is_expected.to be true }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Checked 6 packages. Warnings: 0. Errors: 0. Everything is ok.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -172,9 +174,9 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Run `npm install` to install 5 missing packages.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -188,9 +190,9 @@ describe Npmdc do
     it { is_expected.to be true }
 
     it 'return correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Checked 4 packages. Warnings: 3. Errors: 0. Everything is ok.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -202,9 +204,9 @@ describe Npmdc do
     it { is_expected.to be true }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Checked 4 packages. Warnings: 0. Errors: 0. Everything is ok.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
@@ -216,9 +218,9 @@ describe Npmdc do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Run `npm install` to install 2 missing packages.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end

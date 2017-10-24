@@ -3,7 +3,6 @@ require 'colorized_string'
 module Npmdc
   module Formatters
     class Base
-
       COLORS = {
         success: :green,
         failure: :red,

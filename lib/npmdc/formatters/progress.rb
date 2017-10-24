@@ -6,11 +6,11 @@ module Npmdc
       def dep_output(_dep, status)
         case status
         when :success
-          @output.print color_message(".", status)
+          @output.print color_message('.', status)
         when :failure
-          @output.print color_message("F", status)
+          @output.print color_message('F', status)
         when :warn
-          @output.print color_message("W", status)
+          @output.print color_message('W', status)
         end
       end
 
