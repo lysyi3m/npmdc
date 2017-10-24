@@ -62,11 +62,14 @@ module Npmdc
       output(result_stats, :success)
     end
 
+    def modules_directory
+      @modules_directory ||= File.join(path, 'node_modules')
+      raise(NoNodeModulesError, path: path) unless Dir.exist?(@modules_directory)
+      @modules_directory
+    end
+
     def installed_modules
       @installed_modules ||= begin
-        modules_directory = File.join(path, 'node_modules')
-        raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
-
         Dir.glob("#{modules_directory}/*").each_with_object({}) do |module_file_path, modules|
           next unless File.directory?(module_file_path)
 
