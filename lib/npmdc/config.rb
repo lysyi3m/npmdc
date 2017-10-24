@@ -1,7 +1,7 @@
 module Npmdc
   class Config
-    DEPEPENDENCY_TYPES = %w(dependencies devDependencies).freeze
-    ENVIRONMENTS = %w(development).freeze
+    DEPEPENDENCY_TYPES = %w[dependencies devDependencies].freeze
+    ENVIRONMENTS = %w[development].freeze
 
     attr_accessor :color, :format, :output, :types, :environments,
                   :abort_on_failure

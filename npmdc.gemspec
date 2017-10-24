@@ -1,4 +1,4 @@
-# coding: utf-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -24,15 +24,14 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.1.0'
 
-  spec.add_dependency 'thor',           '> 0.18'
   spec.add_dependency 'colorize',       '~> 0.8.1'
   spec.add_dependency 'semantic_range', '~> 1.0'
+  spec.add_dependency 'thor',           '> 0.18'
 
-  spec.add_development_dependency 'bundler',  '~> 1.13'
-  spec.add_development_dependency 'rake',     '~> 10.0'
-  spec.add_development_dependency 'rspec',    '~> 3.0'
-  spec.add_development_dependency 'rails',    '>= 4.2'
+  spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'pry-byebug'
-
-  spec.add_development_dependency 'rubocop',  '~> 0.50'
+  spec.add_development_dependency 'rails',    '>= 4.2'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'rubocop', '~> 0.50'
 end

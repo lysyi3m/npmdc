@@ -6,8 +6,7 @@ describe Npmdc::Formatter do
 
     let(:known_formatter) do
       Class.new do
-        def initialize(*)
-        end
+        def initialize(*); end
       end
     end
 

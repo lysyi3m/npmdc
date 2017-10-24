@@ -9,7 +9,7 @@ describe Npmdc::Formatters::Progress do
   subject { Npmdc.call(options) }
 
   it 'returns correct message' do
-    output_msg = <<-output.strip_heredoc
+    output_msg = <<-OUTPUT.strip_heredoc
       Checking dependencies:
       ..
 
@@ -17,7 +17,7 @@ describe Npmdc::Formatters::Progress do
       .
 
       Checked 3 packages. Warnings: 0. Errors: 0. Everything is ok.
-    output
+    OUTPUT
 
     expect { subject }.to write_output(output_msg)
   end
@@ -25,7 +25,7 @@ describe Npmdc::Formatters::Progress do
   it 'returns correct colors' do
     options['color'] = true
 
-    output_msg = <<-output.strip_heredoc
+    output_msg = <<-OUTPUT.strip_heredoc
       Checking dependencies:
       \e[0;32;49m.\e[0m\e[0;32;49m.\e[0m
 
@@ -33,7 +33,7 @@ describe Npmdc::Formatters::Progress do
       \e[0;32;49m.\e[0m
 
       \e[0;32;49mChecked 3 packages. Warnings: 0. Errors: 0. Everything is ok.\e[0m
-    output
+    OUTPUT
 
     expect { subject }.to write_output(output_msg)
   end
@@ -44,7 +44,7 @@ describe Npmdc::Formatters::Progress do
     it { is_expected.to be false }
 
     it 'returns correct message' do
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Checking dependencies:
         .F
 
@@ -57,14 +57,14 @@ describe Npmdc::Formatters::Progress do
           * foobarfoo@4.0.0
 
         Run `npm install` to install 3 missing packages.
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end
 
     it 'returns correct colors' do
       options['color'] = true
-      output_msg = <<-output.strip_heredoc
+      output_msg = <<-OUTPUT.strip_heredoc
         Checking dependencies:
         \e[0;32;49m.\e[0m\e[0;31;49mF\e[0m
 
@@ -77,7 +77,7 @@ describe Npmdc::Formatters::Progress do
           * foobarfoo@4.0.0
         \e[0;33;49m
         Run `npm install` to install 3 missing packages.\e[0m
-      output
+      OUTPUT
 
       expect { subject }.to write_output(output_msg)
     end

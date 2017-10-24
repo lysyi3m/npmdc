@@ -11,10 +11,10 @@ module Npmdc
       Npmdc.config.path = Rails.root unless Npmdc.config.path?
     end
 
-    initializer "npmdc.environment_check" do
+    initializer 'npmdc.environment_check' do
       next unless defined?(Rails::Server)
       unless config.npmdc.environments.include?(Rails.env)
-        abort <<-END.strip_heredoc
+        abort <<-NOTIFICATION.strip_heredoc
           Npmdc is trying to be activated in the #{Rails.env} environment.
           Probably, this is a mistake. To ensure it's only activated in development
           mode, move it to the development group of your Gemfile:
@@ -23,11 +23,11 @@ module Npmdc
           what you are doing), put this in your Rails application
           configuration:
               config.npmdc.environments = ['development', '#{Rails.env}']
-        END
+        NOTIFICATION
       end
     end
 
-    initializer "npmdc.call" do
+    initializer 'npmdc.call' do
       Npmdc.call if defined?(Rails::Server)
     end
   end

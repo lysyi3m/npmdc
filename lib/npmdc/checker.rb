@@ -24,9 +24,9 @@ module Npmdc
       @suspicious_dependencies = Set.new
     end
 
-    delegate [
-      :output, :error_output, :dep_output,
-      :check_start_output, :check_finish_output
+    delegate %i[
+      output error_output dep_output
+      check_start_output check_finish_output
     ] => :formatter
 
     def call
