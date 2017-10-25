@@ -89,6 +89,10 @@ module Npmdc
         files.select(&:directory?)
       end
 
+      def valid_directories
+        directories.select { |d| d.package_json_file.exists? || d.scoped? }
+      end
+
       def package_json_file
         self.class.new(File.join(path, 'package.json'))
       end
@@ -116,21 +120,16 @@ module Npmdc
       @installed_modules ||= begin
         modules = {}
 
-        ModulesDirectory.new(modules_directory).directories.each do |module_directory|
-          module_folder = module_directory.folder
-
+        ModulesDirectory.new(modules_directory).valid_directories.each do |module_directory|
           if module_directory.scoped?
-            module_directory.files.each do |file_path|
-              next if !file_path.directory? || !file_path.package_json_file.exists?
-
-              modules["#{module_folder}/#{File.basename(file_path.to_s)}"] = package_json(file_path.to_s)
+            module_directory.valid_directories.each do |scoped_module_directory|
+              modules["#{module_directory.folder}/#{scoped_module_directory.folder}"] = package_json(scoped_module_directory.to_s)
             end
           else
-            next unless module_directory.package_json_file.exists?
-
-            modules[module_folder] = package_json(module_directory.to_s)
+            modules[module_directory.folder] = package_json(module_directory.to_s)
           end
         end
+
         modules
       end
     end
