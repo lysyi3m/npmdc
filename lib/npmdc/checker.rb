@@ -65,38 +65,66 @@ module Npmdc
     class ModulesDirectory
       include Npmdc::Errors
 
-      def initialize#(path)
-        # @path = path
-      end
-
       def self.all(path)
         modules_directory ||= File.join(path, 'node_modules')
         raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
 
-        Dir.glob("#{modules_directory}/*").select { |file_path| File.directory?(file_path) }
+        Dir.glob("#{modules_directory}/*")
+           .select { |file_path| File.directory?(file_path) }
+           .map { |file_path| new(file_path) }
+      end
+
+      attr_reader :path
+
+      def initialize(path)
+        @path = path
+      end
+
+      def to_s
+        path
+      end
+
+      def folder
+        File.basename(path)
+      end
+
+      def scoped?
+        folder.start_with?('@')
+      end
+
+      def files
+        Dir.glob("#{path}/*").map { |file_path| self.class.new(file_path) }
+      end
+
+      def package_json_file
+        File.join(path, 'package.json')
+      end
+
+      def file?
+        File.file?(path)
+      end
+
+      def directory?
+        File.directory?(path)
       end
     end
 
     def installed_modules
       @installed_modules ||= begin
         modules = {}
-        ModulesDirectory.all(path).each do |module_file_path|
-          module_folder = File.basename(module_file_path)
+        ModulesDirectory.all(path).each do |module_directory|
+          module_folder = module_directory.folder
 
-          if module_folder.start_with?('@')
-            Dir.glob("#{module_file_path}/*") do |file_path|
-              module_package_json_file = File.join(file_path, 'package.json')
+          if module_directory.scoped?
+            module_directory.files.each do |file_path|
+              next if !file_path.directory? || !File.file?(file_path.package_json_file)
 
-              next if !File.directory?(file_path) || !File.file?(module_package_json_file)
-
-              modules["#{module_folder}/#{File.basename(file_path)}"] = package_json(file_path)
+              modules["#{module_folder}/#{File.basename(file_path.to_s)}"] = package_json(file_path.to_s)
             end
           else
-            module_package_json_file = File.join(module_file_path, 'package.json')
+            next unless File.file?(module_directory.package_json_file)
 
-            next unless File.file?(module_package_json_file)
-
-            modules[module_folder] = package_json(module_file_path)
+            modules[module_folder] = package_json(module_directory.to_s)
           end
         end
         modules
