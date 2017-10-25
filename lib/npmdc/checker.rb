@@ -63,17 +63,6 @@ module Npmdc
     end
 
     class ModulesDirectory
-      include Npmdc::Errors
-
-      def self.all(path)
-        modules_directory ||= File.join(path, 'node_modules')
-        raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
-
-        Dir.glob("#{modules_directory}/*")
-           .select { |file_path| File.directory?(file_path) }
-           .map { |file_path| new(file_path) }
-      end
-
       attr_reader :path
 
       def initialize(path)
@@ -96,6 +85,10 @@ module Npmdc
         Dir.glob("#{path}/*").map { |file_path| self.class.new(file_path) }
       end
 
+      def directories
+        files.select(&:directory?)
+      end
+
       def package_json_file
         File.join(path, 'package.json')
       end
@@ -109,10 +102,17 @@ module Npmdc
       end
     end
 
+    def modules_directory
+      modules_directory = File.join(path, 'node_modules')
+      raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
+      modules_directory
+    end
+
     def installed_modules
       @installed_modules ||= begin
         modules = {}
-        ModulesDirectory.all(path).each do |module_directory|
+
+        ModulesDirectory.new(modules_directory).directories.each do |module_directory|
           module_folder = module_directory.folder
 
           if module_directory.scoped?
