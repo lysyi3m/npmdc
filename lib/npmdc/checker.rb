@@ -90,7 +90,7 @@ module Npmdc
       end
 
       def package_json_file
-        File.join(path, 'package.json')
+        self.class.new(File.join(path, 'package.json'))
       end
 
       def file?
@@ -99,6 +99,10 @@ module Npmdc
 
       def directory?
         File.directory?(path)
+      end
+
+      def exists?
+        File.file?(path)
       end
     end
 
@@ -117,12 +121,12 @@ module Npmdc
 
           if module_directory.scoped?
             module_directory.files.each do |file_path|
-              next if !file_path.directory? || !File.file?(file_path.package_json_file)
+              next if !file_path.directory? || !file_path.package_json_file.exists?
 
               modules["#{module_folder}/#{File.basename(file_path.to_s)}"] = package_json(file_path.to_s)
             end
           else
-            next unless File.file?(module_directory.package_json_file)
+            next unless module_directory.package_json_file.exists?
 
             modules[module_folder] = package_json(module_directory.to_s)
           end
