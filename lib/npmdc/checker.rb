@@ -69,10 +69,6 @@ module Npmdc
         @path = path
       end
 
-      def to_s
-        path
-      end
-
       def folder
         File.basename(path)
       end
@@ -110,7 +106,7 @@ module Npmdc
       end
     end
 
-    def modules_directory
+    def modules_directory_path
       modules_directory = File.join(path, 'node_modules')
       raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
       modules_directory
@@ -120,13 +116,13 @@ module Npmdc
       @installed_modules ||= begin
         modules = {}
 
-        ModulesDirectory.new(modules_directory).valid_directories.each do |module_directory|
+        ModulesDirectory.new(modules_directory_path).valid_directories.each do |module_directory|
           if module_directory.scoped?
             module_directory.valid_directories.each do |scoped_module_directory|
-              modules["#{module_directory.folder}/#{scoped_module_directory.folder}"] = package_json(scoped_module_directory.to_s)
+              modules["#{module_directory.folder}/#{scoped_module_directory.folder}"] = package_json(scoped_module_directory.path)
             end
           else
-            modules[module_directory.folder] = package_json(module_directory.to_s)
+            modules[module_directory.folder] = package_json(module_directory.path)
           end
         end
 
