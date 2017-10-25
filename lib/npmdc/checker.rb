@@ -31,7 +31,7 @@ module Npmdc
     ] => :formatter
 
     def call
-      package_data = package_json(path)
+      package_data = ModulesDirectory.new(path).package_json
       @types.each do |dep|
         check_dependencies(package_data[dep], dep) if package_data[dep]
       end
@@ -75,28 +75,15 @@ module Npmdc
 
         ModulesDirectory.new(modules_directory_path).valid_directories.each do |module_directory|
           if module_directory.scoped?
-            module_directory.valid_directories.each do |scoped_module_directory|
-              modules["#{module_directory.basename}/#{scoped_module_directory.basename}"] = package_json(scoped_module_directory.path)
+            module_directory.valid_directories.map do |scoped_module_directory|
+              modules["#{module_directory.basename}/#{scoped_module_directory.basename}"] = scoped_module_directory.package_json
             end
           else
-            modules[module_directory.basename] = package_json(module_directory.path)
+            modules[module_directory.basename] = module_directory.package_json
           end
         end
 
         modules
-      end
-    end
-
-    def package_json(directory, filename = 'package.json')
-      raise(WrongPathError, directory: directory) unless Dir.exist?(directory)
-
-      path = File.join(directory, filename)
-      raise(MissedPackageError, directory: directory) unless File.file?(path)
-
-      begin
-        JSON.parse(File.read(path))
-      rescue JSON::ParserError
-        raise(JsonParseError, path: path)
       end
     end
 

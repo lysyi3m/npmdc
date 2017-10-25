@@ -1,4 +1,8 @@
+require 'npmdc/errors'
+
 class ModulesDirectory
+  include Npmdc::Errors
+
   attr_reader :path
 
   def initialize(path)
@@ -27,6 +31,18 @@ class ModulesDirectory
 
   def package_json_file
     self.class.new(File.join(path, 'package.json'))
+  end
+
+  def package_json
+    raise(WrongPathError, directory: path) unless Dir.exist?(path)
+    raise(MissedPackageError, directory: path) unless package_json_file.exists?
+
+    path = package_json_file.path
+    begin
+      JSON.parse(File.read(path))
+    rescue JSON::ParserError
+      raise(JsonParseError, path: path)
+    end
   end
 
   def directory?
