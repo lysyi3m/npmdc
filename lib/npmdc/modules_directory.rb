@@ -29,10 +29,6 @@ class ModulesDirectory
     self.class.new(File.join(path, 'package.json'))
   end
 
-  def file?
-    File.file?(path)
-  end
-
   def directory?
     File.directory?(path)
   end
