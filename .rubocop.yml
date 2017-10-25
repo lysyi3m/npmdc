@@ -16,25 +16,9 @@ Metrics/BlockLength:
 
 # FIXME:
 
-Metrics/ClassLength:
-  Exclude:
-    - lib/npmdc/checker.rb
-
-# Metrics/AbcSize:
-#   Exclude:
-    # - lib/npmdc/checker.rb
-
 Metrics/LineLength:
   Exclude:
     - lib/npmdc/checker.rb
-
-# Metrics/CyclomaticComplexity:
-#   Exclude:
-#     - lib/npmdc/checker.rb
-
-# Metrics/PerceivedComplexity:
-#   Exclude:
-#     - lib/npmdc/checker.rb
 
 Metrics/MethodLength:
   Exclude:
