@@ -19,6 +19,7 @@ Metrics/BlockLength:
 Metrics/LineLength:
   Exclude:
     - lib/npmdc/checker.rb
+    - lib/npmdc/modules_directory.rb
 
 Metrics/MethodLength:
   Exclude:
