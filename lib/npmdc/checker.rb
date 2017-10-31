@@ -4,17 +4,18 @@ require 'forwardable'
 require 'semantic_range'
 require 'npmdc/formatter'
 require 'npmdc/errors'
+require 'npmdc/modules_directory'
 
 module Npmdc
   class Checker
     extend Forwardable
     include Npmdc::Errors
 
-    attr_reader :path, :formatter, :types
+    attr_reader :path, :formatter, :all_types
 
     def initialize(options)
       @path = options.fetch('path', Npmdc.config.path)
-      @types = options.fetch('types', Npmdc.config.types)
+      @all_types = options.fetch('types', Npmdc.config.types)
       @abort_on_failure = options.fetch(
         'abort_on_failure', Npmdc.config.abort_on_failure
       )
@@ -30,21 +31,17 @@ module Npmdc
     ] => :formatter
 
     def call
-      package_data = package_json(path)
-      @types.each do |dep|
-        check_dependencies(package_data[dep], dep) if package_data[dep]
+      types.each do |dep|
+        check_start_output(dep)
+        check_dependencies(package_data[dep])
+        check_finish_output
       end
 
       unless @missing_dependencies.empty?
         raise(MissedDependencyError, dependencies: @missing_dependencies)
       end
 
-      result_stats = "Checked #{@dependencies_count} packages. " \
-                     "Warnings: #{@suspicious_dependencies.count}. " \
-                     "Errors: #{@missing_dependencies.count}. " \
-                     'Everything is ok.'
-
-      output(result_stats, :success)
+      output_stats
 
       true
     rescue CheckerError => e
@@ -57,51 +54,44 @@ module Npmdc
 
     private
 
+    def package_data
+      @package_data ||= ModulesDirectory.new(path).package_json
+    end
+
+    def types
+      all_types.select { |type| package_data[type].present? }
+    end
+
+    # TODO: move to formatter class
+    def output_stats
+      result_stats = "Checked #{@dependencies_count} packages. " \
+                     "Warnings: #{@suspicious_dependencies.count}. " \
+                     "Errors: #{@missing_dependencies.count}. " \
+                     'Everything is ok.'
+
+      output(result_stats, :success)
+    end
+
+    def modules_directory_path
+      modules_directory = File.join(path, 'node_modules')
+      raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
+      modules_directory
+    end
+
     def installed_modules
-      @installed_modules ||= begin
-        modules_directory = File.join(path, 'node_modules')
-        raise(NoNodeModulesError, path: path) unless Dir.exist?(modules_directory)
-
-        Dir.glob("#{modules_directory}/*").each_with_object({}) do |module_file_path, modules|
-          next unless File.directory?(module_file_path)
-
-          module_folder = File.basename(module_file_path)
-
-          if module_folder.start_with?('@')
-            Dir.glob("#{module_file_path}/*") do |file_path|
-              module_package_json_file = File.join(file_path, 'package.json')
-
-              next if !File.directory?(file_path) || !File.file?(module_package_json_file)
-
-              modules["#{module_folder}/#{File.basename(file_path)}"] = package_json(file_path)
+      @installed_modules ||=
+        ModulesDirectory.new(modules_directory_path).valid_directories.each_with_object({}) do |module_directory, modules|
+          if module_directory.scoped?
+            module_directory.valid_directories.map do |scoped_module_directory|
+              modules["#{module_directory.basename}/#{scoped_module_directory.basename}"] = scoped_module_directory.package_json
             end
           else
-            module_package_json_file = File.join(module_file_path, 'package.json')
-
-            next unless File.file?(module_package_json_file)
-
-            modules[module_folder] = package_json(module_file_path)
+            modules[module_directory.basename] = module_directory.package_json
           end
         end
-      end
     end
 
-    def package_json(directory, filename = 'package.json')
-      raise(WrongPathError, directory: directory) unless Dir.exist?(directory)
-
-      path = File.join(directory, filename)
-      raise(MissedPackageError, directory: directory) unless File.file?(path)
-
-      begin
-        JSON.parse(File.read(path))
-      rescue JSON::ParserError
-        raise(JsonParseError, path: path)
-      end
-    end
-
-    def check_dependencies(deps, type)
-      check_start_output(type)
-
+    def check_dependencies(deps)
       deps.each_key do |dep|
         @dependencies_count += 1
 
@@ -109,13 +99,9 @@ module Npmdc
           check_dependency(dep, deps[dep])
         else
           @suspicious_dependencies << "#{dep}@#{deps[dep]}"
-          dep_output(
-            "npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn
-          )
+          dep_output("npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn)
         end
       end
-
-      check_finish_output
     end
 
     def check_dependency(dep, version)
@@ -139,10 +125,7 @@ module Npmdc
         dep_output(dep, :success)
       else
         @missing_dependencies << "#{dep}@#{version}"
-        dep_output(
-          "#{dep} expected version '#{version}' but got '#{current_version}'",
-          :failure
-        )
+        dep_output("#{dep} expected version '#{version}' but got '#{current_version}'", :failure)
       end
     end
   end
