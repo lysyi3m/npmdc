@@ -11,11 +11,11 @@ module Npmdc
     extend Forwardable
     include Npmdc::Errors
 
-    attr_reader :path, :formatter, :types
+    attr_reader :path, :formatter, :all_types
 
     def initialize(options)
       @path = options.fetch('path', Npmdc.config.path)
-      @types = options.fetch('types', Npmdc.config.types)
+      @all_types = options.fetch('types', Npmdc.config.types)
       @abort_on_failure = options.fetch(
         'abort_on_failure', Npmdc.config.abort_on_failure
       )
@@ -31,9 +31,10 @@ module Npmdc
     ] => :formatter
 
     def call
-      package_data = ModulesDirectory.new(path).package_json
-      @types.each do |dep|
-        check_dependencies(package_data[dep], dep) if package_data[dep]
+      types.each do |dep|
+        check_start_output(dep)
+        check_dependencies(package_data[dep])
+        check_finish_output
       end
 
       unless @missing_dependencies.empty?
@@ -52,6 +53,14 @@ module Npmdc
     end
 
     private
+
+    def package_data
+      @package_data ||= ModulesDirectory.new(path).package_json
+    end
+
+    def types
+      all_types.select { |type| package_data[type].present? }
+    end
 
     # TODO: move to formatter class
     def output_stats
@@ -82,9 +91,7 @@ module Npmdc
         end
     end
 
-    def check_dependencies(deps, type)
-      check_start_output(type)
-
+    def check_dependencies(deps)
       deps.each_key do |dep|
         @dependencies_count += 1
 
@@ -92,13 +99,9 @@ module Npmdc
           check_dependency(dep, deps[dep])
         else
           @suspicious_dependencies << "#{dep}@#{deps[dep]}"
-          dep_output(
-            "npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn
-          )
+          dep_output("npmdc cannot check package '#{dep}' (#{deps[dep]})", :warn)
         end
       end
-
-      check_finish_output
     end
 
     def check_dependency(dep, version)
