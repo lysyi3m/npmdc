@@ -125,10 +125,7 @@ module Npmdc
         dep_output(dep, :success)
       else
         @missing_dependencies << "#{dep}@#{version}"
-        dep_output(
-          "#{dep} expected version '#{version}' but got '#{current_version}'",
-          :failure
-        )
+        dep_output("#{dep} expected version '#{version}' but got '#{current_version}'", :failure)
       end
     end
   end
