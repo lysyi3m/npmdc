@@ -18,14 +18,6 @@ module Npmdc
       basename.start_with?('@')
     end
 
-    def files
-      Dir.glob("#{path}/*").map { |file_path| self.class.new(file_path) }
-    end
-
-    def directories
-      files.select(&:directory?)
-    end
-
     def valid_directories
       directories.select { |d| d.package_json_file.exists? || d.scoped? }
     end
@@ -52,6 +44,16 @@ module Npmdc
 
     def exists?
       File.file?(path)
+    end
+
+    private
+
+    def files
+      Dir.glob("#{path}/*").map { |file_path| self.class.new(file_path) }
+    end
+
+    def directories
+      files.select(&:directory?)
     end
   end
 end
