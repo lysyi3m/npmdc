@@ -70,10 +70,8 @@ module Npmdc
     end
 
     def installed_modules
-      @installed_modules ||= begin
-        modules = {}
-
-        ModulesDirectory.new(modules_directory_path).valid_directories.each do |module_directory|
+      @installed_modules ||=
+        ModulesDirectory.new(modules_directory_path).valid_directories.each_with_object({}) do |module_directory, modules|
           if module_directory.scoped?
             module_directory.valid_directories.map do |scoped_module_directory|
               modules["#{module_directory.basename}/#{scoped_module_directory.basename}"] = scoped_module_directory.package_json
@@ -82,9 +80,6 @@ module Npmdc
             modules[module_directory.basename] = module_directory.package_json
           end
         end
-
-        modules
-      end
     end
 
     def check_dependencies(deps, type)
