@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'thor', '> 0.18'
   spec.add_dependency 'colorize', '~> 0.8.1'
   spec.add_dependency 'semantic_range', '~> 1.0'
+  spec.add_development_dependency 'appraisal'
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
