@@ -34,7 +34,7 @@ describe Npmdc::ModulesDirectory do
     context 'when there are directories with package.json' do
       let(:path) { './spec/files/case_2/node_modules' }
       it do
-        is_expected.to eq [
+        is_expected.to match_array [
           './spec/files/case_2/node_modules/bar',
           './spec/files/case_2/node_modules/foo',
           './spec/files/case_2/node_modules/foobar'
@@ -45,7 +45,7 @@ describe Npmdc::ModulesDirectory do
     context 'when there are scoped directories' do
       let(:path) { './spec/files/case_8/node_modules' }
       it do
-        is_expected.to eq [
+        is_expected.to match_array [
           './spec/files/case_8/node_modules/@bar',
           './spec/files/case_8/node_modules/@foo'
         ]
