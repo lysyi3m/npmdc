@@ -28,6 +28,7 @@ describe Npmdc::Railtie do
     Npmdc.config.path = old_path
     Rails.application = old_app
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   it 'adds npmdc config' do
     within_new_app do |app|
